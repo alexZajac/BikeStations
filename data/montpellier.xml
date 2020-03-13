@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<vcs ver="1"><sl><si na="1 Rue Jules Ferry - Gare Saint-Roch" id="1" la="43.605366" lg="3.881346" av="5" fr="11" to="16" cb="1"></si>
+<si na="2 Comédie" id="2" la="43.608148" lg="3.878778" av="6" fr="18" to="24" cb="1"></si>
+<si na="3 Esplanade" id="3" la="43.609478" lg="3.881293" av="0" fr="32" to="32" cb="1"></si>
+<si na="4 Hôtel de Ville" id="4" la="43.599088" lg="3.894866" av="1" fr="15" to="16" cb="1"></si>
+<si na="5 Corum" id="5" la="43.613989" lg="3.881600" av="0" fr="12" to="12" cb="1"></si>
+<si na="6 Place Albert 1er - St Charles" id="6" la="43.616768" lg="3.873375" av="18" fr="13" to="31" cb="1"></si>
+<si na="7 Foch" id="7" la="43.610989" lg="3.873345" av="2" fr="6" to="8"></si>
+<si na="8 Halles Castellane" id="8" la="43.609935" lg="3.877208" av="0" fr="16" to="16"></si>
+<si na="9 Observatoire" id="9" la="43.606081" lg="3.876931" av="3" fr="5" to="8" cb="1"></si>
+<si na="10 Rondelet" id="10" la="43.603038" lg="3.875796" av="7" fr="9" to="16" cb="1"></si>
+<si na="11 Plan Cabanes" id="11" la="43.608491" lg="3.868389" av="5" fr="7" to="12" cb="1"></si>
+<si na="12 Boutonnet" id="12" la="43.622629" lg="3.868375" av="11" fr="1" to="12" cb="1"></si>
+<si na="13 Emile Combes" id="13" la="43.616742" lg="3.879980" av="7" fr="1" to="8"></si>
+<si na="14 Beaux-Arts" id="14" la="43.616698" lg="3.884981" av="4" fr="4" to="8"></si>
+<si na="15 Les Aubes" id="15" la="43.618692" lg="3.893844" av="6" fr="2" to="8"></si>
+<si na="16 Antigone centre" id="16" la="43.607942" lg="3.890634" av="7" fr="9" to="16" cb="1"></si>
+<si na="17 Médiathèque Emile Zola" id="17" la="43.608218" lg="3.893140" av="3" fr="13" to="16" cb="1"></si>
+<si na="18 Nombre d'Or" id="18" la="43.607859" lg="3.886644" av="6" fr="10" to="16" cb="1"></si>
+<si na="19 Louis Blanc" id="19" la="43.614642" lg="3.877648" av="0" fr="16" to="16" cb="1"></si>
+<si na="20 Gambetta" id="20" la="43.607106" lg="3.870693" av="4" fr="4" to="8"></si>
+<si na="21 Port Marianne" id="21" la="43.600320" lg="3.898510" av="15" fr="1" to="16" cb="1"></si>
+<si na="22 Clemenceau" id="22" la="43.603539" lg="3.872394" av="6" fr="6" to="12"></si>
+<si na="23 Les Arceaux" id="23" la="43.611991" lg="3.867157" av="3" fr="13" to="16" cb="1"></si>
+<si na="24 Cité Mion" id="24" la="43.601143" lg="3.884373" av="0" fr="8" to="8"></si>
+<si na="25 Nouveau Saint-Roch" id="25" la="43.599817" lg="3.875757" av="1" fr="7" to="8"></si>
+<si na="26 Renouvier" id="26" la="43.603553" lg="3.867884" av="2" fr="6" to="8"></si>
+<si na="27 Odysseum" id="27" la="43.603727" lg="3.918979" av="6" fr="2" to="8" cb="1"></si>
+<si na="28 Saint-Denis" id="28" la="43.605021" lg="3.875065" av="2" fr="6" to="8"></si>
+<si na="29 Richter" id="29" la="43.603424" lg="3.899263" av="9" fr="7" to="16" cb="1"></si>
+<si na="30 Charles Flahault" id="30" la="43.618762" lg="3.865971" av="5" fr="3" to="8"></si>
+<si na="31 Voltaire" id="31" la="43.603767" lg="3.888659" av="4" fr="4" to="8"></si>
+<si na="32 Prés d'Arènes" id="32" la="43.590480" lg="3.884611" av="5" fr="3" to="8"></si>
+<si na="33 Garcia Lorca" id="33" la="43.590757" lg="3.890616" av="3" fr="5" to="8"></si>
+<si na="34 Vert Bois" id="34" la="43.634580" lg="3.868230" av="0" fr="16" to="16"></si>
+<si na="35 Malbosc" id="35" la="43.633679" lg="3.832861" av="1" fr="7" to="8"></si>
+<si na="36 Occitanie" id="36" la="43.634242" lg="3.849128" av="11" fr="21" to="32" cb="1"></si>
+<si na="37 FacdesSciences" id="37" la="43.631018" lg="3.860697" av="10" fr="14" to="24"></si>
+<si na="38 Fac de Lettres" id="38" la="43.630665" lg="3.870230" av="1" fr="15" to="16" cb="1"></si>
+<si na="39 Aiguelongue" id="39" la="43.626163" lg="3.882492" av="7" fr="1" to="8"></si>
+<si na="40 Jeu de Mail des Abbés" id="40" la="43.619701" lg="3.883831" av="4" fr="4" to="8"></si>
+<si na="41 Euromédecine" id="41" la="43.639119" lg="3.828199" av="1" fr="7" to="8"></si>
+<si na="42 Marie Caizergues" id="42" la="43.619871" lg="3.873812" av="5" fr="3" to="8"></si>
+<si na="43 Sabines" id="43" la="43.584211" lg="3.860031" av="0" fr="8" to="8"></si>
+<si na="44 Celleneuve" id="44" la="43.614670" lg="3.832624" av="0" fr="8" to="8"></si>
+<si na="45 Jardin de la Lironde" id="45" la="43.605850" lg="3.911576" av="7" fr="1" to="8"></si>
+<si na="46 Père Soulas" id="46" la="43.621983" lg="3.855603" av="6" fr="2" to="8"></si>
+<si na="47 Place Viala" id="47" la="43.616812" lg="3.855075" av="5" fr="3" to="8" cb="1"></si>
+<si na="48 Hôtel du Département" id="48" la="43.621682" lg="3.834770" av="0" fr="8" to="8"></si>
+<si na="49 Tonnelles" id="49" la="43.615155" lg="3.839466" av="2" fr="6" to="8"></si>
+<si na="50 Parvis Jules Ferry - Gare Saint-Roch" id="50" la="43.603889" lg="3.879362" av="8" fr="0" to="8" cb="1"></si>
+<si na="51 Pont de Lattes - Gare Saint-Roch" id="51" la="43.606036" lg="3.882393" av="7" fr="5" to="12" cb="1"></si>
+<si na="53 Deux Ponts - Gare Saint-Roch" id="53" la="43.604319" lg="3.880916" av="2" fr="6" to="8"></si>
+<si na="54 Providence - Ovalie" id="54" la="43.588239" lg="3.853421" av="5" fr="3" to="8"></si>
+<si na="55 Pérols Etang de l'Or" id="55" la="43.558351" lg="3.963412" av="10" fr="58" to="68" cb="1"></si>
+<si na="56 Albert 1er - Cathédrale" id="56" la="43.614005" lg="3.873218" av="3" fr="9" to="12" cb="1"></si>
+<si na="57 Saint-Guilhem - Courreau" id="57" la="43.608996" lg="3.872752" av="5" fr="3" to="8"></si>
+<si na="59 Sud De France" id="59" la="43.595620" lg="3.923500" av="4" fr="4" to="8"></si>
+</sl>
+</vcs>
