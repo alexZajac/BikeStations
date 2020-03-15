@@ -1,0 +1,9 @@
+coord :
+	long : Double
+	lat  : Double
+name : String
+address/name : String
+Total : Integer
+AvailablePlace : Integer
+AvailableCycle : Integer
+lastUpdate : Date
