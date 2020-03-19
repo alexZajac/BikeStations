@@ -1,70 +1,46 @@
-import requests
-import json
-import xmltodict
-import urllib
+from rdflib import Literal, URIRef, Namespace
+from rdflib.namespace import RDF
+from bikeApi import getData 
+from store import Store 
 
-HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
 
-def readMapping():
-    with open('C:/Users/Med/Documents/Cours/A4/DataMining/Cmanticz/server/mapping.json') as f:
-        mapping = json.load(f)
-        return mapping
+ns = Namespace("http://www.owl-ontologies.com/unnamed.owl#")
 
-def fetchApi(url,dataType,pathToArray):
-    data = None
-    if(dataType == 'json'):
-        response = requests.get(url)
-        if(response.status_code == 200):
-            data = response.json()
-    else:
-        req = urllib.request.Request(url=url, headers=HEADERS) 
-        xml = urllib.request.urlopen(req)
-        xmlData = xml.read()
-        xml.close()
+def add_data(store, url):  
+    normalizedData = getData()
+    for i, station in enumerate(normalizedData):
+        add_station(store, url, station, i)
 
-        xmlDict = xmltodict.parse(xmlData)
-        jsonString = json.dumps(xmlDict)
-        data = json.loads(jsonString)
-    if(pathToArray != None):
-        data = extractDataFromPath(data,pathToArray)
-    return data
+def switchType(url,paramType):
+    if paramType == 'long': return (ns.long,'location')
+    elif paramType == 'lat': return (ns.lat,'location')
+    elif paramType == 'name': return (ns.name,'station')
+    elif paramType == 'address': return (ns.address,'location')
+    elif paramType == 'capacity': return (ns.capacity,'station')
+    elif paramType == 'freeSlot': return (ns.freeSlots,'station')
+    elif paramType == 'availableBikes': return (ns.availableBikes,'station')
+    elif paramType == 'city': return (ns.city,'location')
+    elif paramType == 'lastUpdate': return (ns.lastUpdate,'station')
+    else: Exception("Unkown paramType")
+        
+    
 
-def tryConvertToNumber(data):
-    if isinstance(data, str) and data.replace('.','',1).isdigit():
-        if data.isdigit():
-            data = int(data)
+def add_station(store, url, station, index):
+    stationRef = URIRef(f"{url}{index}")
+    locationRef = URIRef(f"{url}Location")
+    store.add(stationRef, RDF.type, ns.BikeStation)
+    store.add(locationRef, RDF.type, ns.Location)
+    for prop, value in station.items():
+        propType, dest = switchType(url, prop)
+        if dest == 'location': 
+            store.add(locationRef, propType, Literal(value))
         else:
-            data = float(data)
-    return data
-
-def extractDataFromPath(data,paths):
-    if not paths or not data:
-        return None
-    for path in paths.split(';'):
-        if path.isdigit():
-            path = int(path)
-        data = data[path]
-    return tryConvertToNumber(data)
-    
-
-def normalizeData(data,mapping):
-    normalizedData = []
-    for station in data:
-        if(mapping['pathToData'] != None):
-            station = extractDataFromPath(station,mapping['pathToData'])
-        stationData = {}
-        for param, pathToValue in mapping['params'].items():
-            stationData[param] = extractDataFromPath(station,pathToValue)
-        normalizedData.append(stationData)
-    return normalizedData
-    
-def getData():
-    mappings = readMapping()
-    for mapping in mappings:
-        for url in mapping['url']:
-            data = fetchApi(url,mapping['dataType'],mapping['pathToArray'])
-            normalizedData = normalizeData(data,mapping)
-            print(normalizedData)
+            store.add(stationRef, propType, Literal(value))
 
 if __name__ == "__main__":
-    getData()
+    url = "http://www.owl-ontologies.com/unnamed.owl#"
+    store = Store("./server/ontologie/semanticsProject.owl")
+    # add_data(store, url)
+    # store.printStore()
+    store.query("?x ?y","?x ns:availableBikes ?y .")
+        
