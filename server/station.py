@@ -14,23 +14,23 @@ def addData(store, url):
 def switchType(url, paramType):
     ns = Namespace(url)
     if paramType == 'long':
-        return (ns.long, 'location', XSD.float)
+        return (ns.long, 'location')
     elif paramType == 'lat':
-        return (ns.lat, 'location', XSD.float)
+        return (ns.lat, 'location')
     elif paramType == 'name':
-        return (ns.name, 'station', XSD.string)
+        return (ns.name, 'station')
     elif paramType == 'address':
-        return (ns.address, 'location', XSD.string)
+        return (ns.address, 'location')
     elif paramType == 'capacity':
-        return (ns.capacity, 'station', XSD.integer)
+        return (ns.capacity, 'station')
     elif paramType == 'freeSlot':
-        return (ns.freeSlots, 'station', XSD.integer)
+        return (ns.freeSlots, 'station')
     elif paramType == 'availableBikes':
-        return (ns.availableBikes, 'station', XSD.integer)
+        return (ns.availableBikes, 'station')
     elif paramType == 'city':
-        return (ns.city, 'location', XSD.string)
+        return (ns.city, 'location')
     elif paramType == 'lastUpdate':
-        return (ns.lastUpdate, 'station', XSD.integer)
+        return (ns.lastUpdate, 'station')
     else:
         Exception("Unknown paramType")
 
@@ -43,11 +43,11 @@ def addStation(store, url, station, index):
     store.add(locationRef, RDF.type, ns.Location)
     store.add(stationRef, ns.location, locationRef)
     for prop, value in station.items():
-        propType, dest, datatype = switchType(url, prop)
+        propType, dest = switchType(url, prop)
         if dest == 'location':
-            store.add(locationRef, propType, Literal(value, datatype=datatype))
+            store.add(locationRef, propType, Literal(value))
         else:
-            store.add(stationRef, propType, Literal(value, datatype=datatype))
+            store.add(stationRef, propType, Literal(value))
 
 
 def getStation(store, stationType, city):

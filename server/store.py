@@ -3,7 +3,8 @@ from rdflib import Graph, Literal, URIRef, Namespace
 
 def stationQuery(city):
     return ('?s ?name ?ca ?fr ?av ?last ?l ?lat ?long ?addr ?city',
-            f'''?s rdf:type ns:BikeStation .
+            f'''
+                ?s rdf:type ns:BikeStation .
                 ?s ns:name ?name .
                 ?s ns:capacity ?ca .
                 ?s ns:freeSlots ?fr .
@@ -14,12 +15,24 @@ def stationQuery(city):
                 ?l ns:lat ?lat .
                 ?l ns:long ?long .
                 ?l ns:address ?addr .
-                ?l ns:city ?city .'''
-            )
+                ?l ns:city ?city .
+            ''')
 
 
-def filter_id(id):
-    return id.split('#')[1]
+def to_int(v):
+    try:
+        res = int(v)
+        return res
+    except:
+        return None
+
+
+def to_float(v):
+    try:
+        res = float(v)
+        return res
+    except:
+        return None
 
 
 class Store:
@@ -38,8 +51,9 @@ class Store:
     def query(self, params, request):
         formatted_query = self.formatQuery(params, request)
         print(formatted_query)
-        qres = self.g.query(formatted_query, initNs={"ns": self.url})
-        print(qres)
+        qres = self.g.query(formatted_query,
+                            initNs={"ns": self.url}
+                            )
         count = 0
         res = []
         for row in qres:
@@ -52,24 +66,22 @@ class Store:
     def getStations(self, city):
         stationProjection, stationQry = stationQuery(city)
         formatted_query = self.formatQuery(stationProjection, stationQry)
-        print(formatted_query)
         qres = self.g.query(formatted_query,
                             initNs={"ns": self.url}
                             )
         count, res = 0, []
         for row in qres:
-            print([r for r in row])
+            # print([r for r in row])
             s, name, ca, fr, av, last, l, lat, long, addr, city = row
             res.append({
-                "_id": filter_id(s),
-                "name": name,
+                "_id": s,
                 "city": city,
                 "address": addr,
-                "latitude": lat,
-                "longitude": long,
-                "capacity": ca,
-                "freeSlots": fr,
-                "availableBikes": av,
+                "latitude": to_float(lat),
+                "longitude": to_float(long),
+                "capacity": to_int(ca),
+                "freeSlots": to_int(fr),
+                "availableBikes": to_int(av),
                 "lastUpdate": last
             })
             count += 1
