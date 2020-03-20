@@ -11,6 +11,13 @@ store = Store("./ontologie/semanticsProject.owl")
 addData(store, url)
 
 
+class Home(Resource):
+    def get(self):
+        return {
+            "ack": True
+        }
+
+
 class Station(Resource):
     def get(self):
         parser = reqparse.RequestParser()
@@ -23,5 +30,6 @@ class Station(Resource):
 
 
 api.add_resource(Station, '/v1/station')
+api.add_resource(Home, '/')
 
 app.run(debug=True, port=80)
