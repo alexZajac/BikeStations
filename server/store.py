@@ -9,7 +9,7 @@ class Store:
         self.ns = Namespace(self.url)
 
     def query(self, params, request):
-        formatted_query = """SELECT DISTINCT """+params+"""
+        formatted_query = """SELECT """+params+"""
             WHERE { 
                 """+request+"""
             }"""
@@ -19,7 +19,8 @@ class Store:
                             )
         count = 0
         for row in qres:
-            print("%s is" % row)
+            print(row)
+            # print("%s is %s" % row)
             count += 1
         print(f"Total resources: {count}.")
 
@@ -30,18 +31,3 @@ class Store:
         for subj, pred, obj in self.g:
             print(subj, pred, obj, sep="\n", end="\n\n\n")
 
-    # def add(self,):
-    #     station = URIRef(f"{self.url}BikeStation")
-    #     name = Literal('test')
-
-    #     self.g.add((station, self.ns.name , name) )
-    #     print(self.g.serialize(format="turtle"))
-
-    #     # for subj, pred, obj in self.g:
-    #     #     print(subj, pred, obj, sep="\n", end="\n\n\n")
-
-# if __name__ == "__main__":
-#     store = Store("./server/ontologie/bikes.owl")
-#     # store.query("?p ns:age ?b .")
-#     store.add()
-#     store.query("?x ?y", "?x ns:name ?y .")
