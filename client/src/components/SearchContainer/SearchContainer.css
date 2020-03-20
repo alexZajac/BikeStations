@@ -1,7 +1,7 @@
 .search-container {
   flex: 4;
   height: 100vh;
-  box-shadow: 10px 0 50px #333;
+  box-shadow: 10px 0 30px #666;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,21 +18,12 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin: 20px;
 }
 
 .logo {
   width: auto;
   height: 8vh;
-}
-
-.empty-logo {
-  width: 100%;
-  height: auto;
-}
-
-.empty-text {
-  font-size: 20px;
-  font-family: "Open Sans";
 }
 
 .filters-container {
@@ -50,7 +41,7 @@
   justify-content: center;
 }
 
-.restaurant-wrapper {
+.stations-wrapper {
   width: 100%;
   flex: 1;
   align-items: center;

@@ -1,94 +1,44 @@
-const distinctionOptions = [
-  {
-    value: "BIB_GOURMAND",
-    label: "Bib Gourmand"
-  },
-  {
-    value: "ONE_STAR",
-    label: "1 étoile"
-  },
-  {
-    value: "TWO_STARS",
-    label: "2 étoiles"
-  },
-  {
-    value: "THREE_STARS",
-    label: "3 étoiles"
-  }
-];
-
-const cookingOptions = [
-  {
-    value: "Toutes cuisines",
-    label: "Toutes cuisines"
-  },
-  {
-    value: "Cuisine moderne",
-    label: "Cuisine moderne"
-  },
-  {
-    value: "Cuisine créative",
-    label: "Cuisine créative"
-  },
-  {
-    value: "Cuisine traditionnelle",
-    label: "Cuisine traditionnelle"
-  },
-  {
-    value: "Cuisine classique",
-    label: "Cuisine classique"
-  },
-  {
-    value: "Cuisine du terroir",
-    label: "Cuisine du terroir"
-  },
-  {
-    value: "Cuisine méditerranéenne",
-    label: "Cuisine méditerranéenne"
-  },
-  {
-    value: "Cuisine provençale",
-    label: "Cuisine provençale"
-  },
-  {
-    value: "Cuisine du marché",
-    label: "Cuisine du marché"
-  },
-  {
-    value: "Cuisine régionale",
-    label: "Cuisine régionale"
-  }
-];
-
-const sortingOptions = [
-  {
-    value: "PRICE_ASC",
-    label: "Trier par prix croissant"
-  },
-  {
-    value: "PRICE_DESC",
-    label: "Trier par prix décroissant"
-  },
-  {
-    value: "DISTANCE",
-    label: "Trier par distance"
-  },
-  {
-    value: "RATING_DESC",
-    label: "Trier par note décroissante"
-  },
-  {
-    value: "RATING_ASC",
-    label: "Trier par note croissante"
-  }
-];
+const BIKE_TYPE = "bikes";
+const TRAIN_TYPE = "trains";
 
 const defaultOptions = {
-  distinction: distinctionOptions[0],
-  cooking: cookingOptions[0],
-  sorting: sortingOptions[0],
-  query: ""
+  city: "Paris",
+  type: BIKE_TYPE
 };
+
+const cityOptions = [
+  {
+    label: "Paris",
+    value: "Paris"
+  },
+  {
+    label: "Lyon",
+    value: "Lyon"
+  },
+  {
+    label: "Montpellier",
+    value: "Montpellier"
+  },
+  {
+    label: "Rennes",
+    value: "Rennes"
+  },
+  {
+    label: "Strasbourg",
+    value: "Strasbourg"
+  }
+];
+
+const typeOptions = [
+  {
+    label: "Bikes",
+    value: "bikes"
+  },
+  {
+    label: "Trains",
+    value: "trains"
+  }
+];
 
 const selectStyles = width => ({
   control: styles => ({
@@ -116,7 +66,7 @@ const selectStyles = width => ({
 
 const defaultMapState = {
   viewport: {
-    width: "60vw",
+    width: "100%",
     height: "100vh",
     latitude: 48.8534,
     longitude: 2.3488,
@@ -125,10 +75,9 @@ const defaultMapState = {
 };
 
 export {
-  distinctionOptions,
-  cookingOptions,
-  sortingOptions,
   defaultOptions,
   selectStyles,
-  defaultMapState
+  defaultMapState,
+  cityOptions,
+  typeOptions
 };

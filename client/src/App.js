@@ -4,33 +4,39 @@ import { defaultOptions } from "./Constants";
 import "./App.css";
 import { MapContainer, SearchContainer } from "./components";
 
-const { REACT_APP_API_URL } = process.env;
+const REACT_APP_API_URL = "https://jsonplaceholder.typicode.com/todos";
 
 const App = () => {
-  const [userLocation, setUserLocation] = useState(null);
-  const [restaurants, setRestaurants] = useState([]);
+  const [stations, setStations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(defaultOptions);
 
   useEffect(() => {
-    const fetchRestaurants = async () => {
+    const fetchStations = async () => {
+      const { city, type } = filters;
       try {
-        const response = await axios.post(
-          `${REACT_APP_API_URL}/api/restaurants`,
-          {
-            ...filters,
-            userLocation
-          }
-        );
+        const response = await axios(`${REACT_APP_API_URL}`);
         const { data } = response;
-        const { error, restaurants } = data;
-        if (error.length > 0) alert(error);
-        setRestaurants(restaurants);
+        const stations = data.map((s, i) => ({
+          _id: "BikeStation_" + i,
+          city: "Lyon",
+          name: "Perrache Est",
+          address: "48 Cours Suchet",
+          latitude: 34.052234,
+          longitude: -118.243685,
+          capacity: 20,
+          freeSlot: 3,
+          availableBikes: 17,
+          lastUpdate: "2020-03-20 10:30:00"
+        }));
+        // const { error, stations } = data;
+        // if (error.length > 0) alert(error);
+        setStations(stations);
       } catch (e) {
         alert(e);
       }
     };
-    if (loading) fetchRestaurants();
+    if (loading) fetchStations();
   }, [loading]);
 
   useEffect(() => {
@@ -39,39 +45,17 @@ const App = () => {
 
   useEffect(() => {
     setLoading(false);
-  }, [restaurants]);
-
-  useEffect(() => {
-    localizeUser();
-  }, []);
-
-  const localizeUser = () => {
-    navigator.geolocation.getCurrentPosition(position => {
-      const userLocation = {
-        lat: position.coords.latitude,
-        long: position.coords.longitude
-      };
-      setUserLocation(userLocation);
-    });
-  };
-
-  const setRestaurantsFocus = restoId => {
-    setRestaurants(restaurants.filter(r => r._id === restoId));
-  };
+  }, [stations]);
 
   return (
     <div className="app">
       <SearchContainer
-        restaurants={restaurants}
+        stations={stations}
         filters={filters}
         setFilters={setFilters}
         loading={loading}
       />
-      <MapContainer
-        userLocation={userLocation}
-        restaurants={restaurants}
-        setRestaurantsFocus={setRestaurantsFocus}
-      />
+      <MapContainer stations={stations} />
     </div>
   );
 };
