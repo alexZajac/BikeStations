@@ -1,5 +1,5 @@
 from rdflib import Literal, URIRef, Namespace
-from rdflib.namespace import RDF
+from rdflib.namespace import RDF, XSD
 from bikeApi import getData
 from store import Store
 
@@ -8,29 +8,29 @@ def addData(store, url):
     normalizedData = getData()
     for i, station in enumerate(normalizedData):
         addStation(store, url, station, i)
-    print("Done init")
+    print("All resources added.")
 
 
 def switchType(url, paramType):
     ns = Namespace(url)
     if paramType == 'long':
-        return (ns.long, 'location')
+        return (ns.long, 'location', XSD.float)
     elif paramType == 'lat':
-        return (ns.lat, 'location')
+        return (ns.lat, 'location', XSD.float)
     elif paramType == 'name':
-        return (ns.name, 'station')
+        return (ns.name, 'station', XSD.string)
     elif paramType == 'address':
-        return (ns.address, 'location')
+        return (ns.address, 'location', XSD.string)
     elif paramType == 'capacity':
-        return (ns.capacity, 'station')
+        return (ns.capacity, 'station', XSD.integer)
     elif paramType == 'freeSlot':
-        return (ns.freeSlots, 'station')
+        return (ns.freeSlots, 'station', XSD.integer)
     elif paramType == 'availableBikes':
-        return (ns.availableBikes, 'station')
+        return (ns.availableBikes, 'station', XSD.integer)
     elif paramType == 'city':
-        return (ns.city, 'location')
+        return (ns.city, 'location', XSD.string)
     elif paramType == 'lastUpdate':
-        return (ns.lastUpdate, 'station')
+        return (ns.lastUpdate, 'station', XSD.integer)
     else:
         Exception("Unknown paramType")
 
@@ -43,41 +43,22 @@ def addStation(store, url, station, index):
     store.add(locationRef, RDF.type, ns.Location)
     store.add(stationRef, ns.location, locationRef)
     for prop, value in station.items():
-        propType, dest = switchType(url, prop)
+        propType, dest, datatype = switchType(url, prop)
         if dest == 'location':
-            store.add(locationRef, propType, Literal(value))
+            store.add(locationRef, propType, Literal(value, datatype=datatype))
         else:
-            store.add(stationRef, propType, Literal(value))
+            store.add(stationRef, propType, Literal(value, datatype=datatype))
 
 
-def getStation(store, sationType, city):
-    if sationType == 'bikes':
-        # store.query(
-        #     '?x ?ca ?fr ?av ?last', 
-        #     f''' 
-        #         ?x rdf:type ns:BikeStation .
-        #         ?x ns:capacity ?ca .
-        #         ?x ns:freeSlots ?fr .
-        #         ?x ns:availableBikes ?av .
-        #         ?x ns:lastUpdate ?last .
-        #         ?x ns:location ?ci .
-        #         ?ci ns:city "{city}" .
-        #     ''')        
-        store.query(
-            '?x ?na ?long ?lat ?ad ?ca ?fr ?av ?ci ?last', 
-            f''' 
-                ?x rdf:type ns:BikeStation .
-                ?x ns:capacity ?ca.
-                ?x ns:freeSlots ?fr .
-                ?x ns:availableBikes ?av .
-                ?x ns:lastUpdate ?last .
-                ?x ns:location ?ci .
-                ?ci ns:city "{city}" .
-                ?ci ns:name ?na .
-                ?ci ns:long ?long .
-                ?ci ns:lat ?lat .
-                ?ci ns:address ?ad .
-            ''')
+def getStation(store, stationType, city):
+    if stationType == 'bikes':
+        stations = store.getStations(city)
+        return {
+            "data": {
+                "city": city,
+                "stations": stations
+            }
+        }
     else:
         return {'hello': 'world'}
 
