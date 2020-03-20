@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from store import Store
 from station import addData, getStation
+import os
 
 app = Flask(__name__)
 api = Api(app)
