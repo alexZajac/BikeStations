@@ -52,25 +52,25 @@ def extractDataFromPath(data, paths):
     return tryConvertToNumber(data)
 
 
-def normalizeData(data, mapping, normalizedData):
+def normalizeData(data, mapping):
+    normalizedData = []
     for station in data:
         if(mapping['pathToData'] != None):
             station = extractDataFromPath(station, mapping['pathToData'])
         stationData = {}
         for param, pathToValue in mapping['params'].items():
             stationData[param] = extractDataFromPath(station, pathToValue)
-        stationData["city"] = mapping["city"]
         normalizedData.append(stationData)
+    return normalizedData
 
 
 def getData():
     mappings = readMapping()
-    normalizedData = []
     for mapping in mappings:
         for url in mapping['url']:
             data = fetchApi(url, mapping['dataType'], mapping['pathToArray'])
-            normalizeData(data, mapping, normalizedData)
-    return normalizedData
+            normalizedData = normalizeData(data, mapping)
+            print(normalizedData)
 
 
 if __name__ == "__main__":

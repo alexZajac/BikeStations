@@ -1,5 +1,6 @@
 from rdflib import Graph, Literal, URIRef, Namespace
 
+
 class Store:
     def __init__(self, ontologieName):
         self.g = Graph()
@@ -8,29 +9,31 @@ class Store:
         self.ns = Namespace(self.url)
 
     def query(self, params, request):
-        qres = self.g.query(
-            """SELECT DISTINCT """+params+"""
+        formatted_query = """SELECT DISTINCT """+params+"""
             WHERE { 
                 """+request+"""
-            }""",
-            initNs = { "ns": self.url }
-        )
-
+            }"""
+        print(formatted_query)
+        qres = self.g.query(formatted_query,
+                            initNs={"ns": self.url}
+                            )
+        count = 0
         for row in qres:
-            print("%s is %s" % row)
+            print("%s is" % row)
+            count += 1
+        print(f"Total resources: {count}.")
 
     def add(self, subj, pred, obj):
         self.g.add((subj, pred, obj))
-    
+
     def printStore(self):
         for subj, pred, obj in self.g:
             print(subj, pred, obj, sep="\n", end="\n\n\n")
 
-
     # def add(self,):
     #     station = URIRef(f"{self.url}BikeStation")
     #     name = Literal('test')
-        
+
     #     self.g.add((station, self.ns.name , name) )
     #     print(self.g.serialize(format="turtle"))
 
@@ -39,6 +42,6 @@ class Store:
 
 # if __name__ == "__main__":
 #     store = Store("./server/ontologie/bikes.owl")
-#     # store.query("?p ns:age ?b .") 
+#     # store.query("?p ns:age ?b .")
 #     store.add()
 #     store.query("?x ?y", "?x ns:name ?y .")
