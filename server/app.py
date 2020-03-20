@@ -32,4 +32,4 @@ class Station(Resource):
 api.add_resource(Station, '/v1/station')
 api.add_resource(Home, '/')
 
-app.run(port=5000)
+app.run(debug=True)
