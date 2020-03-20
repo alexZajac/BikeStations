@@ -81,6 +81,6 @@ if __name__ == "__main__":
     add_data(store, url)
     mockAdd(store, url)
     # store.printStore()
-    store.query(
-        "?x", '?x rdf:type ns:BikeStation .\n ?x ns:location ?l .\n ?l ns:city "Lyon" .'
-    )
+    # store.query(
+    #     "?x", '?x rdf:type ns:BikeStation .\n ?x ns:location ?l .\n ?l ns:city "Lyon" .'
+    # )

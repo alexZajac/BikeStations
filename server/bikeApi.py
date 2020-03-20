@@ -71,7 +71,3 @@ def getData():
             data = fetchApi(url, mapping['dataType'], mapping['pathToArray'])
             normalizeData(data, mapping, normalizedData)
     return normalizedData
-
-
-if __name__ == "__main__":
-    getData()

@@ -1,0 +1,4 @@
+Flask==1.1.1
+rdflib==4.2.2
+request==2019.4.13
+xmltodict==0.12.0
