@@ -1,0 +1,66 @@
+.map-container {
+  width: 60vw;
+  height: 100vh;
+  position: relative;
+}
+
+.container-user-marker {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-restaurant {
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+}
+
+.pulsating-marker {
+  width: 100px;
+  height: 100px;
+  background-color: rgba(0, 191, 255, 0.33);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.2);
+    background-color: rgba(0, 191, 255, 0.5);
+  }
+  100% {
+    transform: scale(1);
+    background-color: rgba(0, 191, 255, 0);
+  }
+}
+
+.fixed-marker {
+  width: 20px;
+  height: 20px;
+  left: calc(8vw / 2 - 20 / 2);
+  top: calc(8vw / 2 - 20 / 2);
+  position: absolute;
+  background-color: deepskyblue;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.fixed-marker-outline {
+  width: 30px;
+  height: 30px;
+  left: calc(8vw / 2 - 30 / 2);
+  top: calc(8vw / 2 - 30 / 2);
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+@media only screen and (max-width: 920px) {
+  .map-container {
+    width: 100vw;
+  }
+}

@@ -82,5 +82,5 @@ if __name__ == "__main__":
     mockAdd(store, url)
     # store.printStore()
     store.query(
-        "?x", '?x ns:capacity 14 .'
+        "?x", '?x rdf:type ns:BikeStation .\n ?x ns:location ?l .\n ?l ns:city "Lyon" .'
     )
