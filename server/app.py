@@ -33,5 +33,5 @@ class Station(Resource):
 api.add_resource(Station, '/v1/station')
 api.add_resource(Home, '/')
 
-port = int(os.environ.get("PORT", 5000))
-app.run(host='0.0.0.0', port=port)
+if __name__ == "__main__":
+    app.run()

@@ -76,6 +76,7 @@ class Store:
             res.append({
                 "_id": s,
                 "city": city,
+                "name": name,
                 "address": addr,
                 "latitude": to_float(lat),
                 "longitude": to_float(long),

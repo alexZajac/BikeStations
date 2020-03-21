@@ -3,7 +3,7 @@ const TRAIN_TYPE = "trains";
 
 const defaultOptions = {
   city: "Paris",
-  type: BIKE_TYPE
+  refreshOption: "1 minute"
 };
 
 const cityOptions = [
@@ -29,14 +29,30 @@ const cityOptions = [
   }
 ];
 
-const typeOptions = [
+const refreshOptions = [
   {
-    label: "Bikes",
-    value: "bikes"
+    label: "30 seconds",
+    value: "30 seconds"
   },
   {
-    label: "Trains",
-    value: "trains"
+    label: "1 minute",
+    value: "1 minute"
+  },
+  {
+    label: "5 minutes",
+    value: "5 minutes"
+  },
+  {
+    label: "30 minutes",
+    value: "3 minutes"
+  },
+  {
+    label: "1 hour",
+    value: "1 hour"
+  },
+  {
+    label: "24 hours",
+    value: "24 hours"
   }
 ];
 
@@ -79,5 +95,5 @@ export {
   selectStyles,
   defaultMapState,
   cityOptions,
-  typeOptions
+  refreshOptions
 };

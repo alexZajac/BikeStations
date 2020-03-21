@@ -4,8 +4,6 @@ import { defaultOptions } from "./Constants";
 import "./App.css";
 import { MapContainer, SearchContainer } from "./components";
 
-const REACT_APP_API_URL = "https://jsonplaceholder.typicode.com/todos";
-
 const App = () => {
   const [stations, setStations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,24 +11,19 @@ const App = () => {
 
   useEffect(() => {
     const fetchStations = async () => {
-      const { city, type } = filters;
+      const { city } = filters;
       try {
-        const response = await axios(`${REACT_APP_API_URL}`);
-        const { data } = response;
-        const stations = data.map((s, i) => ({
-          _id: "BikeStation_" + i,
-          city: "Lyon",
-          name: "Perrache Est",
-          address: "48 Cours Suchet",
-          latitude: 34.052234,
-          longitude: -118.243685,
-          capacity: 20,
-          freeSlot: 3,
-          availableBikes: 17,
-          lastUpdate: "2020-03-20 10:30:00"
-        }));
-        // const { error, stations } = data;
-        // if (error.length > 0) alert(error);
+        const url = `/v1/station?city=${city}&type=bikes`;
+        console.log(url);
+        const response = await axios({
+          url,
+          method: "GET",
+          timeout: 1000 * 60 * 10
+        });
+        const { data: respData } = response;
+        const { data } = respData;
+        const { stations } = data;
+        console.log(stations);
         setStations(stations);
       } catch (e) {
         alert(e);
@@ -40,12 +33,12 @@ const App = () => {
   }, [loading]);
 
   useEffect(() => {
-    setLoading(true);
-  }, [filters]);
-
-  useEffect(() => {
     setLoading(false);
   }, [stations]);
+
+  useEffect(() => {
+    setLoading(true);
+  }, [filters]);
 
   return (
     <div className="app">

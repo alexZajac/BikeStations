@@ -1,0 +1,1 @@
+docker run -p "$PORT":3030 stain/jena-fuseki

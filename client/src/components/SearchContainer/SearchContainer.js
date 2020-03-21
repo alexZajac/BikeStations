@@ -3,7 +3,7 @@ import "./SearchContainer.css";
 
 import Select from "react-select";
 
-import { selectStyles, cityOptions, typeOptions } from "../../Constants";
+import { selectStyles, cityOptions, refreshOptions } from "../../Constants";
 import bike_logo from "../../assets/bike_logo.png";
 
 import { Station, SkeletonStation } from "../Station";
@@ -38,8 +38,7 @@ const SearchContainer = ({ filters, setFilters, loading, stations }) => {
           placeholder="City..."
           isSearchable={false}
           styles={selectStyles(getFilterWidth())}
-          onChange={city =>
-            city !== filters.city &&
+          onChange={({ value: city }) =>
             setFilters({
               ...filters,
               city
@@ -49,16 +48,15 @@ const SearchContainer = ({ filters, setFilters, loading, stations }) => {
       </div>
       <div className="select-container">
         <Select
-          options={typeOptions}
-          value={filters.type}
-          placeholder="Station type..."
+          options={refreshOptions}
+          value={filters.refreshOption}
+          placeholder="Refresh Interval..."
           isSearchable={false}
           styles={selectStyles(getFilterWidth())}
-          onChange={type =>
-            type !== filters.type &&
+          onChange={({ value: refreshOption }) =>
             setFilters({
               ...filters,
-              type
+              refreshOption
             })
           }
         />

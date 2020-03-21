@@ -2,13 +2,14 @@ import requests
 import json
 import xmltodict
 import urllib
+import json
 
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
 
 
 def readMapping():
-    with open('./mapping/mapping_complete.json') as f:
+    with open('./server/mapping/mapping_complete.json') as f:
         mapping = json.load(f)
         return mapping
 
@@ -69,5 +70,11 @@ def getData():
     for mapping in mappings:
         for url in mapping['url']:
             data = fetchApi(url, mapping['dataType'], mapping['pathToArray'])
-            normalizeData(data, mapping, normalizedData)
+            if data:
+                normalizeData(data, mapping, normalizedData)
     return normalizedData
+
+
+with open("./server/data.json", "w") as file:
+    data = getData()
+    json.dump(data, file)

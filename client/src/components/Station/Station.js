@@ -24,12 +24,12 @@ const Station = ({
   name,
   address,
   capacity,
-  freeSlot,
+  freeSlots,
   availableBikes,
   lastUpdate
 }) => {
   const getLocation = () => `${address}, ${city}`;
-  const getSlots = () => `${freeSlot} slots remaining on ${capacity}`;
+  const getSlots = () => `${freeSlots} slots remaining on ${capacity}`;
   const getAvailabilities = () => `${availableBikes} bikes available for rent`;
   const getLastUpdate = () => `${lastUpdate} (last update)`;
 
@@ -94,7 +94,7 @@ const SkeletonStation = () => {
           <Skeleton width="10vw" height="3vh" />
         </div>
         <div className="row-infos">
-          <Skeleton width="20vw" height="3vh" />
+          <Skeleton width="15vw" height="3vh" />
         </div>
       </div>
       <div className="icons-infos">
