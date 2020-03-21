@@ -24,20 +24,26 @@ const Station = ({
   name,
   address,
   capacity,
-  freeSlots,
+  freeSlot,
   availableBikes,
   lastUpdate
 }) => {
-  const getLocation = () => `${address}, ${city}`;
-  const getSlots = () => `${freeSlots} slots remaining on ${capacity}`;
-  const getAvailabilities = () => `${availableBikes} bikes available for rent`;
-  const getLastUpdate = () => `${lastUpdate} (last update)`;
+  const getLocation = () => `${address === null ? "" : address + ","} ${city}`;
+  const getSlots = () => `${freeSlot} slots remaining on ${capacity}`;
+  const getAvailabilities = () =>
+    `${
+      availableBikes === null
+        ? "No data on availability"
+        : availableBikes + " bikes available for rent"
+    }`;
+  const getLastUpdate = () =>
+    `${lastUpdate === null ? "Not available" : lastUpdate + " (last update)"}`;
 
   const renderContent = () => (
     <div className="content-container">
       <div className="main-infos">
         <p property="ns:name" className="primary-info">
-          {name}
+          {name === null ? "" : name}
         </p>
         <p className="secondary-info">{getLocation()}</p>
       </div>

@@ -11,15 +11,10 @@ const App = () => {
 
   useEffect(() => {
     const fetchStations = async () => {
-      const { city } = filters;
+      const { city: { value } } = filters;
       try {
-        const url = `/v1/station?city=${city}&type=bikes`;
-        console.log(url);
-        const response = await axios({
-          url,
-          method: "GET",
-          timeout: 1000 * 60 * 10
-        });
+        const url = `/v1/station?city=${value}&type=bikes`;
+        const response = await axios(url);
         const { data: respData } = response;
         const { data } = respData;
         const { stations } = data;

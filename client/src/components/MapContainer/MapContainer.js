@@ -1,35 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./MapContainer.css";
 import ReactMapGL, { Marker } from "react-map-gl";
 
 import marker_bike from "../../assets/marker_bike.png";
 
 import "./MapContainer.css";
-import { defaultMapState } from "../../Constants";
+import { defaultMapState, coordinates } from "../../Constants";
 
 const MapContainer = ({ stations }) => {
   const [state, setState] = useState(defaultMapState);
 
+  useEffect(() => {
+    if (stations.length > 0) {
+      const { city } = stations[0];
+      const { latitude, longitude } = coordinates[city];
+      setState({
+        ...state,
+        viewport: {
+          ...state.viewport,
+          zoom: 12,
+          latitude,
+          longitude
+        }
+      });
+    }
+  }, [stations, coordinates]);
+
   const renderStations = () =>
-    stations.map(s => {
+    stations.map((s, i) => {
       const { _id, latitude, longitude } = s;
-      return (
-        <Marker
-          key={_id}
-          latitude={latitude}
-          longitude={longitude}
-          offsetLeft={-50}
-          offsetTop={-75}
-        >
-          <div className="container-user-marker">
-            <img
-              src={marker_bike}
-              className="marker-station"
-              alt="Marker station"
-            />
-          </div>
-        </Marker>
-      );
+      if (i > 0) {
+        return (
+          <Marker
+            key={_id}
+            latitude={latitude}
+            longitude={longitude}
+            offsetLeft={-50}
+            offsetTop={-75}
+          >
+            <div className="container-user-marker">
+              <img
+                src={marker_bike}
+                className="marker-station"
+                alt="Marker station"
+              />
+            </div>
+          </Marker>
+        );
+      }
     });
 
   return (

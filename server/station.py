@@ -1,17 +1,20 @@
 from bikeApi import getData
-from newStore import insert, query, formatInsert, stationQuery
+from newStore import insert, query, delete, formatInsert, stationQuery
 import re
 import json
 
 OWL_URL = "http://www.owl-ontologies.com/unnamed.owl#"
 
+
 def addData():
+    delete()
+    print("Data deleted.")
     normalizedData = getData()
     print("Data fetched.")
     tripletList = []
     for i, station in enumerate(normalizedData):
         addStation(station, i, tripletList)
-        if i%3 == 0:    
+        if i % 3 == 0:
             insertPayload = formatInsert(tripletList)
             insert(insertPayload)
             tripletList = []
@@ -24,7 +27,7 @@ def createTriplet(subject, predicate, objectValue):
     if not objectValue:
         objectValue = "!None"
         objectValue = f'"{objectValue}"'
-    elif isinstance(objectValue,str):
+    elif isinstance(objectValue, str):
         if objectValue[:3] != 'ns:' and objectValue[:5] != '<http':
             objectValue = re.sub(r'[^\w]', ' ', objectValue)
             objectValue = f'"{objectValue}"'
@@ -57,16 +60,17 @@ def switchType(paramType):
 def addStation(station, index, tripletList):
     stationRef = f"<{OWL_URL}BikeStation_{index}>"
     locationRef = f"<{OWL_URL}Location_{index}>"
-    tripletList.append(createTriplet(stationRef,"rdf:type","ns:BikeStation"))
-    tripletList.append(createTriplet(locationRef,"rdf:type","ns:Location"))
-    tripletList.append(createTriplet(stationRef,"ns:location",locationRef))
+    tripletList.append(createTriplet(stationRef, "rdf:type", "ns:BikeStation"))
+    tripletList.append(createTriplet(locationRef, "rdf:type", "ns:Location"))
+    tripletList.append(createTriplet(stationRef, "ns:location", locationRef))
     for prop, value in station.items():
         propType, dest = switchType(prop)
         if dest == 'location':
             tripletList.append(createTriplet(locationRef, propType, value))
         else:
             tripletList.append(createTriplet(stationRef, propType, value))
-    
+
+
 def convertRDFToValue(rdfVariable):
     typeValue, datatype, value = None, None, None
     if "type" in rdfVariable:
@@ -88,8 +92,9 @@ def convertRDFToValue(rdfVariable):
         else:
             return value
     else:
-        Exception(f"Unknown typeValue for datatype:{datatype} && datatype:{value}")
-            
+        Exception(
+            f"Unknown typeValue for datatype:{datatype} && datatype:{value}")
+
 
 def FormatBikeStationResponse(stations):
     results = []

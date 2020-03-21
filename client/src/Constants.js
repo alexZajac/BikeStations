@@ -1,11 +1,6 @@
 const BIKE_TYPE = "bikes";
 const TRAIN_TYPE = "trains";
 
-const defaultOptions = {
-  city: "Paris",
-  refreshOption: "1 minute"
-};
-
 const cityOptions = [
   {
     label: "Paris",
@@ -56,6 +51,11 @@ const refreshOptions = [
   }
 ];
 
+const defaultOptions = {
+  city: cityOptions[0],
+  refreshOption: refreshOptions[0]
+};
+
 const selectStyles = width => ({
   control: styles => ({
     ...styles,
@@ -80,6 +80,29 @@ const selectStyles = width => ({
   option: styles => ({ ...styles, fontFamily: "Open Sans", fontSize: "12px" })
 });
 
+const coordinates = {
+  Paris: {
+    latitude: 48.8534,
+    longitude: 2.3488
+  },
+  Rennes: {
+    latitude: 48.113,
+    longitude: -1.681
+  },
+  Lyon: {
+    latitude: 45.764,
+    longitude: 4.8357
+  },
+  Strasbourg: {
+    latitude: 48.5734,
+    longitude: 7.7521
+  },
+  Montpellier: {
+    latitude: 43.6108,
+    longitude: 3.8767
+  }
+};
+
 const defaultMapState = {
   viewport: {
     width: "100%",
@@ -95,5 +118,6 @@ export {
   selectStyles,
   defaultMapState,
   cityOptions,
-  refreshOptions
+  refreshOptions,
+  coordinates
 };

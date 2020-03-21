@@ -34,11 +34,11 @@ const SearchContainer = ({ filters, setFilters, loading, stations }) => {
       <div className="select-container">
         <Select
           options={cityOptions}
-          value={filters.city}
+          value={{ label: filters.city.label }}
           placeholder="City..."
           isSearchable={false}
           styles={selectStyles(getFilterWidth())}
-          onChange={({ value: city }) =>
+          onChange={city =>
             setFilters({
               ...filters,
               city
@@ -49,11 +49,11 @@ const SearchContainer = ({ filters, setFilters, loading, stations }) => {
       <div className="select-container">
         <Select
           options={refreshOptions}
-          value={filters.refreshOption}
+          value={{ label: filters.refreshOption.label }}
           placeholder="Refresh Interval..."
           isSearchable={false}
           styles={selectStyles(getFilterWidth())}
-          onChange={({ value: refreshOption }) =>
+          onChange={refreshOption =>
             setFilters({
               ...filters,
               refreshOption
