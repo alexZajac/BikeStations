@@ -1,22 +1,24 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
-from store import Store
 from station import addData, getStation
-import os
 
 app = Flask(__name__)
 api = Api(app)
-
-url = "http://www.owl-ontologies.com/unnamed.owl#"
-store = Store("./ontologie/semanticsProject.owl")
-addData(store, url)
 
 
 class Home(Resource):
     def get(self):
         return {
+            "updated": True
+        }
+    
+class AddData(Resource):
+    def get(self):
+        addData()
+        return {
             "ack": True
         }
+
 
 
 class Station(Resource):
@@ -27,10 +29,11 @@ class Station(Resource):
         parser.add_argument('type',  required=True,
                             help='Type cannot be blank!')
         args = parser.parse_args()
-        return getStation(store, args['type'], args['city'])
+        return getStation(args['type'], args['city'])
 
 
 api.add_resource(Station, '/v1/station')
+api.add_resource(AddData, '/v1/addData')
 api.add_resource(Home, '/')
 
 if __name__ == "__main__":

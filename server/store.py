@@ -2,20 +2,20 @@ from rdflib import Graph, Literal, URIRef, Namespace
 
 
 def stationQuery(city):
-    return ('?s ?name ?ca ?fr ?av ?last ?l ?lat ?long ?addr ?city',
+    return ('?s ?ca ?fr ?av ?last ?l ?city ?name ?addr ?lat ?long  ',
             f'''
                 ?s rdf:type ns:BikeStation .
-                ?s ns:name ?name .
                 ?s ns:capacity ?ca .
                 ?s ns:freeSlots ?fr .
                 ?s ns:availableBikes ?av .
                 ?s ns:lastUpdate ?last .
                 ?s ns:location ?l .
                 ?l ns:city "{city}" .
+                ?l ns:city ?city .
+                ?l ns:name ?name .
+                ?l ns:address ?addr .
                 ?l ns:lat ?lat .
                 ?l ns:long ?long .
-                ?l ns:address ?addr .
-                ?l ns:city ?city .
             ''')
 
 
@@ -43,10 +43,15 @@ class Store:
         self.ns = Namespace(self.url)
 
     def formatQuery(self, params, request):
-        return """SELECT """+params+"""
+        return """
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX ns: <http://www.owl-ontologies.com/unnamed.owl#> 
+
+            SELECT DISTINCT """+params+"""
             WHERE { 
                 """+request+"""
-            }"""
+            }
+        """
 
     def query(self, params, request):
         formatted_query = self.formatQuery(params, request)
