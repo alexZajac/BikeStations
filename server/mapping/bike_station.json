@@ -1,0 +1,12 @@
+{
+    "_id" : "s",
+    "city": "city",
+    "name": "name",
+    "address": "addr",
+    "latitude": "lat",
+    "longitude": "long",
+    "capacity": "ca",
+    "freeSlot": "fr",
+    "availableBikes": "av",
+    "lastUpdate": "last"
+}

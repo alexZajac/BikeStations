@@ -8,7 +8,7 @@ HEADERS = {
 
 
 def readMapping():
-    with open('./mapping/mapping_complete.json') as f:
+    with open('./mapping/bike_api.json') as f:
         mapping = json.load(f)
         return mapping
 
