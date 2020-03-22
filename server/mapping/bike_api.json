@@ -19,6 +19,139 @@
     }
   },
   {
+    "city": "Mulhouse",
+    "url": [
+      "https://api.jcdecaux.com/vls/v1/stations?contract=Mulhouse&apiKey=0f416252b8b509510416d336e1d7cb75433e5fd1"
+    ],
+    "pathToArray": null,
+    "pathToData": null,
+    "dataType": "json",
+    "params": {
+      "long": "position;lng",
+      "lat": "position;lat",
+      "name": "name",
+      "address": "address",
+      "capacity": "bike_stands",
+      "freeSlot": "available_bike_stands",
+      "availableBikes": "available_bikes",
+      "lastUpdate": "last_update"
+    }
+  },
+  {
+    "city": "Amiens",
+    "url": [
+      "https://api.jcdecaux.com/vls/v1/stations?contract=Amiens&apiKey=0f416252b8b509510416d336e1d7cb75433e5fd1"
+    ],
+    "pathToArray": null,
+    "pathToData": null,
+    "dataType": "json",
+    "params": {
+      "long": "position;lng",
+      "lat": "position;lat",
+      "name": "name",
+      "address": "address",
+      "capacity": "bike_stands",
+      "freeSlot": "available_bike_stands",
+      "availableBikes": "available_bikes",
+      "lastUpdate": "last_update"
+    }
+  },
+  {
+    "city": "Marseille",
+    "url": [
+      "https://api.jcdecaux.com/vls/v1/stations?contract=Marseille&apiKey=0f416252b8b509510416d336e1d7cb75433e5fd1"
+    ],
+    "pathToArray": null,
+    "pathToData": null,
+    "dataType": "json",
+    "params": {
+      "long": "position;lng",
+      "lat": "position;lat",
+      "name": "name",
+      "address": "address",
+      "capacity": "bike_stands",
+      "freeSlot": "available_bike_stands",
+      "availableBikes": "available_bikes",
+      "lastUpdate": "last_update"
+    }
+  },
+  {
+    "city": "Nancy",
+    "url": [
+      "https://api.jcdecaux.com/vls/v1/stations?contract=Nancy&apiKey=0f416252b8b509510416d336e1d7cb75433e5fd1"
+    ],
+    "pathToArray": null,
+    "pathToData": null,
+    "dataType": "json",
+    "params": {
+      "long": "position;lng",
+      "lat": "position;lat",
+      "name": "name",
+      "address": "address",
+      "capacity": "bike_stands",
+      "freeSlot": "available_bike_stands",
+      "availableBikes": "available_bikes",
+      "lastUpdate": "last_update"
+    }
+  },
+  {
+    "city": "Nantes",
+    "url": [
+      "https://api.jcdecaux.com/vls/v1/stations?contract=Nantes&apiKey=0f416252b8b509510416d336e1d7cb75433e5fd1"
+    ],
+    "pathToArray": null,
+    "pathToData": null,
+    "dataType": "json",
+    "params": {
+      "long": "position;lng",
+      "lat": "position;lat",
+      "name": "name",
+      "address": "address",
+      "capacity": "bike_stands",
+      "freeSlot": "available_bike_stands",
+      "availableBikes": "available_bikes",
+      "lastUpdate": "last_update"
+    }
+  },
+  {
+    "city": "Rouen",
+    "url": [
+      "https://api.jcdecaux.com/vls/v1/stations?contract=Rouen&apiKey=0f416252b8b509510416d336e1d7cb75433e5fd1"
+    ],
+    "pathToArray": null,
+    "pathToData": null,
+    "dataType": "json",
+    "params": {
+      "long": "position;lng",
+      "lat": "position;lat",
+      "name": "name",
+      "address": "address",
+      "capacity": "bike_stands",
+      "freeSlot": "available_bike_stands",
+      "availableBikes": "available_bikes",
+      "lastUpdate": "last_update"
+    }
+  },
+  {
+    "city": "Toulouse",
+    "url": [
+      "https://api.jcdecaux.com/vls/v1/stations?contract=Toulouse&apiKey=0f416252b8b509510416d336e1d7cb75433e5fd1"
+    ],
+    "pathToArray": null,
+    "pathToData": null,
+    "dataType": "json",
+    "params": {
+      "long": "position;lng",
+      "lat": "position;lat",
+      "name": "name",
+      "address": "address",
+      "capacity": "bike_stands",
+      "freeSlot": "available_bike_stands",
+      "availableBikes": "available_bikes",
+      "lastUpdate": "last_update"
+    }
+  },
+  {
     "city": "Rennes",
     "url": [
       "https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=etat-des-stations-le-velo-star-en-temps-reel&rows=1000&facet=nom&facet=etat&facet=nombreemplacementsactuels&facet=nombreemplacementsdisponibles&facet=nombrevelosdisponibles"

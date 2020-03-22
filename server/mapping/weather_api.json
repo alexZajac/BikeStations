@@ -1,0 +1,158 @@
+[
+  {
+    "city": "Lyon",
+    "url": [
+      "https://api.waqi.info/feed/lyon/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Mulhouse",
+    "url": [
+      "https://api.waqi.info/feed/mulhouse/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Amiens",
+    "url": [
+      "https://api.waqi.info/feed/amiens/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Marseille",
+    "url": [
+      "https://api.waqi.info/feed/marseille/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Nancy",
+    "url": [
+      "https://api.waqi.info/feed/nancy/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Nantes",
+    "url": [
+      "https://api.waqi.info/feed/nantes/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Rouen",
+    "url": [
+      "https://api.waqi.info/feed/rouen/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Toulouse",
+    "url": [
+      "https://api.waqi.info/feed/toulouse/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Rennes",
+    "url": [
+      "https://api.waqi.info/feed/rennes/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Paris",
+    "url": [
+      "https://api.waqi.info/feed/paris/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Montpellier",
+    "url": [
+      "https://api.waqi.info/feed/montpellier/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  },
+  {
+    "city": "Strasbourg",
+    "url": [
+      "https://api.waqi.info/feed/strasbourg/?token=2eb9f6c5d9f34f56bf5bc485693d62ce9423bccf"
+    ],
+    "pathToArray": null,
+    "pathToData": "data",
+    "dataType": "json",
+    "params": {
+      "temperature": "iaqi;t;v",
+      "pollutionIndex": "aqi"
+    }
+  }
+]

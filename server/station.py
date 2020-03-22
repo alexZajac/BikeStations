@@ -1,6 +1,8 @@
 from bikeApi import getData
-from newStore import insert, query, delete, formatInsert, stationQuery
+from weatherApi import getWeatherData
+from newStore import insert, query, delete, formatInsert, stationQuery, cityQuery
 import re
+from datetime import datetime
 import json
 
 OWL_URL = "http://www.owl-ontologies.com/unnamed.owl#"
@@ -11,6 +13,8 @@ def addData():
     print("Data deleted.")
     normalizedData = getData()
     print("Data fetched.")
+    addCitiesRefs()
+    print("Cities added.")
     tripletList = []
     for i, station in enumerate(normalizedData):
         addStation(station, i, tripletList)
@@ -21,6 +25,24 @@ def addData():
     insertPayload = formatInsert(tripletList)
     insert(insertPayload)
     print("All resources added.")
+
+
+def addCitiesRefs():
+    weatherData = getWeatherData()
+    tripletList = []
+    for cityWeather in weatherData:
+        cityName, temperature, pollutionIndex = cityWeather[
+            "cityName"], cityWeather["temperature"], cityWeather["pollutionIndex"]
+        cityRef = f"<{OWL_URL}{cityName}>"
+        tripletList.append(createTriplet(cityRef, "rdf:type", "ns:City"))
+        tripletList.append(createTriplet(cityRef, "ns:cityName", cityName))
+        tripletList.append(createTriplet(
+            cityRef, "ns:temperature", temperature))
+        tripletList.append(createTriplet(
+            cityRef, "ns:pollutionIndex", pollutionIndex))
+        insertPayload = formatInsert(tripletList)
+        insert(insertPayload)
+        tripletList = []
 
 
 def createTriplet(subject, predicate, objectValue):
@@ -63,11 +85,20 @@ def addStation(station, index, tripletList):
     tripletList.append(createTriplet(stationRef, "rdf:type", "ns:BikeStation"))
     tripletList.append(createTriplet(locationRef, "rdf:type", "ns:Location"))
     tripletList.append(createTriplet(stationRef, "ns:location", locationRef))
+    tripletList.append(createTriplet(locationRef, "ns:city", locationRef))
     for prop, value in station.items():
         propType, dest = switchType(prop)
         if dest == 'location':
-            tripletList.append(createTriplet(locationRef, propType, value))
+            if prop == "city":
+                tripletList.append(createTriplet(
+                    locationRef, propType, f"<{OWL_URL}{value}>"))
+            else:
+                tripletList.append(createTriplet(locationRef, propType, value))
         else:
+            # convert epoch time from milliseconds
+            if prop == "lastUpdate" and isinstance(value, int):
+                value = datetime.fromtimestamp(
+                    value / 1000.0).strftime('%Y-%m-%d %H:%M:%S')
             tripletList.append(createTriplet(stationRef, propType, value))
 
 
@@ -96,7 +127,7 @@ def convertRDFToValue(rdfVariable):
             f"Unknown typeValue for datatype:{datatype} && datatype:{value}")
 
 
-def FormatBikeStationResponse(stations):
+def formatBikeStationResponse(stations):
     results = []
     with open('./mapping/bike_station.json') as f:
         mapping = json.load(f)
@@ -108,14 +139,29 @@ def FormatBikeStationResponse(stations):
     return results
 
 
+def formatCityDataResponse(cities):
+    results = []
+    with open('./mapping/weather_station.json') as f:
+        mapping = json.load(f)
+        for city in cities["results"]["bindings"]:
+            cityDict = {}
+            for param, var in mapping.items():
+                cityDict[param] = convertRDFToValue(city[var])
+            results.append(cityDict)
+    return results
+
+
 def getStation(stationType, city):
     if stationType == 'bikes':
         queryPayload = stationQuery(city)
         results = query(queryPayload)
-        stations = FormatBikeStationResponse(results)
+        stations = formatBikeStationResponse(results)
+        queryPayload = cityQuery(city)
+        results = query(queryPayload)
+        cityData = formatCityDataResponse(results)
         return {
             "data": {
-                "city": city,
+                "city": cityData[0],
                 "stations": stations
             }
         }

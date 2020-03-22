@@ -56,12 +56,25 @@ def stationQuery(city):
         ?s ns:availableBikes ?av .
         ?s ns:lastUpdate ?last .
         ?s ns:location ?l .
-        ?l ns:city "{city}" .
-        ?l ns:city ?city .
         ?l ns:name ?name .
         ?l ns:address ?addr .
         ?l ns:lat ?lat .
         ?l ns:long ?long .
+        ?l ns:city ?c .
+        ?c ns:cityName "{city}" .
+        ?c ns:cityName ?city .
+    '''
+    return formatQuery(params, request)
+
+
+def cityQuery(city):
+    params = '?name ?temperature ?pollutionIndex '
+    request = f'''
+        ?city rdf:type ns:City .
+        ?city ns:cityName "{city}" .
+        ?city ns:cityName ?name .
+        ?city ns:temperature ?temperature .
+        ?city ns:pollutionIndex ?pollutionIndex .
     '''
     return formatQuery(params, request)
 

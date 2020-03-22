@@ -9,7 +9,7 @@ HEADERS = {
 
 
 def readMapping():
-    with open('./mapping/bike_api.json') as f:
+    with open('./mapping/weather_api.json') as f:
         mapping = json.load(f)
         return mapping
 
@@ -20,17 +20,6 @@ def fetchApi(url, dataType, pathToArray):
         response = requests.get(url)
         if(response.status_code == 200):
             data = response.json()
-    else:
-        req = urllib.request.Request(url=url, headers=HEADERS)
-        xml = urllib.request.urlopen(req)
-        xmlData = xml.read()
-        xml.close()
-
-        xmlDict = xmltodict.parse(xmlData)
-        jsonString = json.dumps(xmlDict)
-        data = json.loads(jsonString)
-    if(pathToArray != None):
-        data = extractDataFromPath(data, pathToArray)
     return data
 
 
@@ -39,9 +28,7 @@ def tryConvertToNumber(data):
         if data.isdigit():
             data = int(data)
         else:
-            data = float(f"{float(data):.4f}")
-    elif isinstance(data, float):
-        data = float(f"{data:.4f}")
+            data = float(data)
     return data
 
 
@@ -56,19 +43,15 @@ def extractDataFromPath(data, paths):
 
 
 def normalizeData(data, mapping, normalizedData):
-    for station in data:
-        if(mapping['pathToData'] != None):
-            station = extractDataFromPath(
-                station, mapping['pathToData'])
-        stationData = {}
-        for param, pathToValue in mapping['params'].items():
-            stationData[param] = extractDataFromPath(
-                station, pathToValue)
-        stationData["city"] = mapping["city"]
-        normalizedData.append(stationData)
+    weather = extractDataFromPath(data, mapping['pathToData'])
+    weatherData = {}
+    for param, pathToValue in mapping['params'].items():
+        weatherData[param] = extractDataFromPath(weather, pathToValue)
+    weatherData["cityName"] = mapping["city"]
+    normalizedData.append(weatherData)
 
 
-def getData():
+def getWeatherData():
     mappings = readMapping()
     normalizedData = []
     for mapping in mappings:

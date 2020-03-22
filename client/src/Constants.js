@@ -7,6 +7,34 @@ const cityOptions = [
     value: "Paris"
   },
   {
+    label: "Amiens",
+    value: "Amiens"
+  },
+  {
+    label: "Marseille",
+    value: "Marseille"
+  },
+  {
+    label: "Mulhouse",
+    value: "Mulhouse"
+  },
+  {
+    label: "Nancy",
+    value: "Nancy"
+  },
+  {
+    label: "Nantes",
+    value: "Nantes"
+  },
+  {
+    label: "Rouen",
+    value: "Rouen"
+  },
+  {
+    label: "Toulouse",
+    value: "Toulouse"
+  },
+  {
     label: "Lyon",
     value: "Lyon"
   },
@@ -100,6 +128,34 @@ const coordinates = {
   Montpellier: {
     latitude: 43.6108,
     longitude: 3.8767
+  },
+  Amiens: {
+    latitude: 49.8941,
+    longitude: 2.2958
+  },
+  Marseille: {
+    latitude: 43.2965,
+    longitude: 5.3698
+  },
+  Mulhouse: {
+    latitude: 47.7508,
+    longitude: 7.3359
+  },
+  Nancy: {
+    latitude: 48.6921,
+    longitude: 6.1844
+  },
+  Nantes: {
+    latitude: 47.2184,
+    longitude: -1.5536
+  },
+  Rouen: {
+    latitude: 49.4432,
+    longitude: 1.1
+  },
+  Toulouse: {
+    latitude: 43.6047,
+    longitude: 1.4442
   }
 };
 

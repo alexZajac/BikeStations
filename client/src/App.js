@@ -11,13 +11,16 @@ const App = () => {
 
   useEffect(() => {
     const fetchStations = async () => {
-      const { city: { value } } = filters;
+      const {
+        city: { value }
+      } = filters;
       try {
         const url = `/v1/station?city=${value}&type=bikes`;
         const response = await axios(url);
         const { data: respData } = response;
         const { data } = respData;
-        const { stations } = data;
+        const { stations, city } = data;
+        console.log(city);
         console.log(stations);
         setStations(stations);
       } catch (e) {
