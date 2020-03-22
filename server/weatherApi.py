@@ -1,12 +1,5 @@
 import requests
 import json
-import xmltodict
-import urllib
-import json
-
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
-
 
 def readMapping():
     with open('./mapping/weather_api.json') as f:
@@ -60,3 +53,6 @@ def getWeatherData():
             if data:
                 normalizeData(data, mapping, normalizedData)
     return normalizedData
+
+if __name__ == "__main__":
+    res = getWeatherData()

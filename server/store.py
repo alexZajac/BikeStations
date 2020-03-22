@@ -1,102 +1,103 @@
-from rdflib import Graph, Literal, URIRef, Namespace
+import requests
+
+STORE_URL = "http://localhost:3030/bikestation"
+
+HEADERS_QUERY = {'Content-type': 'application/sparql-query'}
+HEADERS_UPDATE = {'Content-type': 'application/sparql-update'}
+
+
+def formatQuery(params, request):
+    return """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ns: <http://www.owl-ontologies.com/unnamed.owl#> 
+
+        SELECT DISTINCT """+params+"""
+        WHERE { 
+            """+request+"""
+        }
+    """
+
+
+def formatDelete():
+    return """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ns: <http://www.owl-ontologies.com/unnamed.owl#> 
+
+        DELETE
+        {
+            ?s ?p ?o
+        }
+        WHERE
+        {
+            ?s ?p ?o
+        }
+    """
+
+
+def formatInsert(tripletList):
+    request = "".join(tripletList)
+    return """
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX ns: <http://www.owl-ontologies.com/unnamed.owl#> 
+
+        INSERT DATA
+        { 	
+            """+request+"""
+        }
+    """
 
 
 def stationQuery(city):
-    return ('?s ?ca ?fr ?av ?last ?l ?city ?name ?addr ?lat ?long  ',
-            f'''
-                ?s rdf:type ns:BikeStation .
-                ?s ns:capacity ?ca .
-                ?s ns:freeSlots ?fr .
-                ?s ns:availableBikes ?av .
-                ?s ns:lastUpdate ?last .
-                ?s ns:location ?l .
-                ?l ns:city "{city}" .
-                ?l ns:city ?city .
-                ?l ns:name ?name .
-                ?l ns:address ?addr .
-                ?l ns:lat ?lat .
-                ?l ns:long ?long .
-            ''')
+    params = '?s ?ca ?fr ?av ?last ?l ?city ?name ?addr ?lat ?long '
+    request = f'''
+        ?s rdf:type ns:BikeStation .
+        ?s ns:capacity ?ca .
+        ?s ns:freeSlots ?fr .
+        ?s ns:availableBikes ?av .
+        ?s ns:lastUpdate ?last .
+        ?s ns:location ?l .
+        ?l ns:name ?name .
+        ?l ns:address ?addr .
+        ?l ns:lat ?lat .
+        ?l ns:long ?long .
+        ?l ns:city ?c .
+        ?c ns:cityName "{city}" .
+        ?c ns:cityName ?city .
+    '''
+    return formatQuery(params, request)
 
 
-def to_int(v):
-    try:
-        res = int(v)
-        return res
-    except:
-        return None
+def cityQuery(city):
+    params = '?name ?temperature ?pollutionIndex '
+    request = f'''
+        ?city rdf:type ns:City .
+        ?city ns:cityName "{city}" .
+        ?city ns:cityName ?name .
+        ?city ns:temperature ?temperature .
+        ?city ns:pollutionIndex ?pollutionIndex .
+    '''
+    return formatQuery(params, request)
 
 
-def to_float(v):
-    try:
-        res = float(v)
-        return res
-    except:
-        return None
+def query(payload):
+    response = requests.post(STORE_URL, data=payload, headers=HEADERS_QUERY)
+    if response.status_code != 200:
+        response.raise_for_status()
+    data = response.json()
+    return data
 
 
-class Store:
-    def __init__(self, ontologieName):
-        self.g = Graph()
-        self.g.parse(ontologieName)
-        self.url = "http://www.owl-ontologies.com/unnamed.owl#"
-        self.ns = Namespace(self.url)
+def insert(payload):
+    response = requests.post(STORE_URL, data=payload, headers=HEADERS_UPDATE)
+    if response.status_code != 204:
+        response.raise_for_status()
 
-    def formatQuery(self, params, request):
-        return """
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX ns: <http://www.owl-ontologies.com/unnamed.owl#> 
 
-            SELECT DISTINCT """+params+"""
-            WHERE { 
-                """+request+"""
-            }
-        """
+def delete():
+    response = requests.post(STORE_URL, data=formatDelete(), headers=HEADERS_UPDATE)
+    if response.status_code != 204:
+        response.raise_for_status()
 
-    def query(self, params, request):
-        formatted_query = self.formatQuery(params, request)
-        print(formatted_query)
-        qres = self.g.query(formatted_query,
-                            initNs={"ns": self.url}
-                            )
-        count = 0
-        res = []
-        for row in qres:
-            # print([r for r in row])
-            res.append([r for r in row])
-            count += 1
-        print(f"Total resources: {count}.")
-        return res
 
-    def getStations(self, city):
-        stationProjection, stationQry = stationQuery(city)
-        formatted_query = self.formatQuery(stationProjection, stationQry)
-        qres = self.g.query(formatted_query,
-                            initNs={"ns": self.url}
-                            )
-        count, res = 0, []
-        for row in qres:
-            # print([r for r in row])
-            s, name, ca, fr, av, last, l, lat, long, addr, city = row
-            res.append({
-                "_id": s,
-                "city": city,
-                "name": name,
-                "address": addr,
-                "latitude": to_float(lat),
-                "longitude": to_float(long),
-                "capacity": to_int(ca),
-                "freeSlots": to_int(fr),
-                "availableBikes": to_int(av),
-                "lastUpdate": last
-            })
-            count += 1
-        print(f"Total resources: {count}.")
-        return res
-
-    def add(self, subj, pred, obj):
-        self.g.add((subj, pred, obj))
-
-    def printStore(self):
-        for subj, pred, obj in self.g:
-            print(subj, pred, obj, sep="\n", end="\n\n\n")
+if __name__ == "__main__":
+    pass

@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
-from station import addData, getStation
+from station import addDataInStore, getStation
 
 app = Flask(__name__)
 api = Api(app)
@@ -14,11 +14,10 @@ class Home(Resource):
     
 class AddData(Resource):
     def get(self):
-        addData()
+        addDataInStore()
         return {
             "ack": True
         }
-
 
 
 class Station(Resource):

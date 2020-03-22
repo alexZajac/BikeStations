@@ -1,6 +1,7 @@
 from bikeApi import getData
 from weatherApi import getWeatherData
-from newStore import insert, query, delete, formatInsert, stationQuery, cityQuery
+from store import insert, query, delete, formatInsert, stationQuery, cityQuery
+import arrow
 import re
 from datetime import datetime
 import json
@@ -8,27 +9,48 @@ import json
 OWL_URL = "http://www.owl-ontologies.com/unnamed.owl#"
 
 
-def addData():
+def addDataInStore():
     delete()
     print("Data deleted.")
+    addCitiesInfos()
+    addStations()
+
+
+def addStations():
     normalizedData = getData()
-    print("Data fetched.")
-    addCitiesRefs()
-    print("Cities added.")
+    print("Stations fetched.")
     tripletList = []
-    for i, station in enumerate(normalizedData):
-        addStation(station, i, tripletList)
-        if i % 3 == 0:
+    for index, station in enumerate(normalizedData):
+        stationRef = f"<{OWL_URL}BikeStation_{index}>"
+        locationRef = f"<{OWL_URL}Location_{index}>"
+        tripletList.append(createTriplet(stationRef, "rdf:type", "ns:BikeStation"))
+        tripletList.append(createTriplet(locationRef, "rdf:type", "ns:Location"))
+        tripletList.append(createTriplet(stationRef, "ns:location", locationRef))
+        for prop, value in station.items():
+            propType, dest = switchType(prop)
+            if dest == 'location':
+                if prop == 'city':
+                    tripletList.append(createTriplet(locationRef, propType, f"<{OWL_URL}{value}>"))
+                else:
+                    tripletList.append(createTriplet(locationRef, propType, value))
+            else:
+                # convert epoch time from milliseconds
+                if prop == "lastUpdate":
+                    if isinstance(value, int):
+                        value = int(value/1000)
+                    if isinstance(value, str):
+                        value =  arrow.get(value).timestamp
+                tripletList.append(createTriplet(stationRef, propType, value))
+        if index%5 == 0:
             insertPayload = formatInsert(tripletList)
             insert(insertPayload)
             tripletList = []
-    insertPayload = formatInsert(tripletList)
-    insert(insertPayload)
-    print("All resources added.")
+    print("Stations imported.")
 
 
-def addCitiesRefs():
+def addCitiesInfos():
     weatherData = getWeatherData()
+    print("Cities Infos fetched.")
     tripletList = []
     for cityWeather in weatherData:
         cityName, temperature, pollutionIndex = cityWeather[
@@ -36,13 +58,11 @@ def addCitiesRefs():
         cityRef = f"<{OWL_URL}{cityName}>"
         tripletList.append(createTriplet(cityRef, "rdf:type", "ns:City"))
         tripletList.append(createTriplet(cityRef, "ns:cityName", cityName))
-        tripletList.append(createTriplet(
-            cityRef, "ns:temperature", temperature))
-        tripletList.append(createTriplet(
-            cityRef, "ns:pollutionIndex", pollutionIndex))
-        insertPayload = formatInsert(tripletList)
-        insert(insertPayload)
-        tripletList = []
+        tripletList.append(createTriplet(cityRef, "ns:temperature", temperature))
+        tripletList.append(createTriplet(cityRef, "ns:pollutionIndex", pollutionIndex))
+    insertPayload = formatInsert(tripletList)
+    insert(insertPayload)
+    print("Cities Infos imported.")
 
 
 def createTriplet(subject, predicate, objectValue):
@@ -79,29 +99,6 @@ def switchType(paramType):
         Exception("Unknown paramType")
 
 
-def addStation(station, index, tripletList):
-    stationRef = f"<{OWL_URL}BikeStation_{index}>"
-    locationRef = f"<{OWL_URL}Location_{index}>"
-    tripletList.append(createTriplet(stationRef, "rdf:type", "ns:BikeStation"))
-    tripletList.append(createTriplet(locationRef, "rdf:type", "ns:Location"))
-    tripletList.append(createTriplet(stationRef, "ns:location", locationRef))
-    tripletList.append(createTriplet(locationRef, "ns:city", locationRef))
-    for prop, value in station.items():
-        propType, dest = switchType(prop)
-        if dest == 'location':
-            if prop == "city":
-                tripletList.append(createTriplet(
-                    locationRef, propType, f"<{OWL_URL}{value}>"))
-            else:
-                tripletList.append(createTriplet(locationRef, propType, value))
-        else:
-            # convert epoch time from milliseconds
-            if prop == "lastUpdate" and isinstance(value, int):
-                value = datetime.fromtimestamp(
-                    value / 1000.0).strftime('%Y-%m-%d %H:%M:%S')
-            tripletList.append(createTriplet(stationRef, propType, value))
-
-
 def convertRDFToValue(rdfVariable):
     typeValue, datatype, value = None, None, None
     if "type" in rdfVariable:
@@ -110,7 +107,6 @@ def convertRDFToValue(rdfVariable):
         datatype = rdfVariable["datatype"]
     if "value" in rdfVariable:
         value = rdfVariable["value"]
-    print(typeValue, datatype, value)
     if typeValue == 'uri':
         return value.split('#')[1]
     elif typeValue == 'literal':
