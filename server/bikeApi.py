@@ -2,9 +2,13 @@ import requests
 import json
 import xmltodict
 import urllib
+from concurrent.futures import ThreadPoolExecutor as PoolExecutor
 
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'
+}
+MAX_WORKERS = 8
+normalizedData = []
 
 
 def readMapping():
@@ -67,12 +71,16 @@ def normalizeData(data, mapping, normalizedData):
         normalizedData.append(stationData)
 
 
+def get_data_from_mapping(mapping):
+    for url in mapping['url']:
+        data = fetchApi(url, mapping['dataType'], mapping['pathToArray'])
+        if data:
+            normalizeData(data, mapping, normalizedData)
+
+
 def getData():
     mappings = readMapping()
-    normalizedData = []
-    for mapping in mappings:
-        for url in mapping['url']:
-            data = fetchApi(url, mapping['dataType'], mapping['pathToArray'])
-            if data:
-                normalizeData(data, mapping, normalizedData)
+    with PoolExecutor(max_workers=MAX_WORKERS) as executor:
+        for _ in executor.map(get_data_from_mapping, mappings):
+            pass
     return normalizedData

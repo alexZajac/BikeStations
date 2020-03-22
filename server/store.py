@@ -1,6 +1,6 @@
 import requests
 
-STORE_URL = "http://localhost:3030/bikestation"
+STORE_URL = "http://192.168.99.101:3030/bikestation"
 
 HEADERS_QUERY = {'Content-type': 'application/sparql-query'}
 HEADERS_UPDATE = {'Content-type': 'application/sparql-update'}
@@ -34,8 +34,8 @@ def formatDelete():
     """
 
 
-def formatInsert(tripletList):
-    request = "".join(tripletList)
+def formatInsert(values):
+    request = " \n".join(values)
     return """
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         PREFIX ns: <http://www.owl-ontologies.com/unnamed.owl#> 
@@ -87,16 +87,18 @@ def query(payload):
     return data
 
 
-def insert(payload):
-    response = requests.post(STORE_URL, data=payload, headers=HEADERS_UPDATE)
-    if response.status_code != 204:
-        response.raise_for_status()
+def insert(session, payload):
+    with session.post(STORE_URL, data=payload, headers=HEADERS_UPDATE) as response:
+        if response.status_code != 204:
+            response.raise_for_status()
 
 
 def delete():
-    response = requests.post(STORE_URL, data=formatDelete(), headers=HEADERS_UPDATE)
+    response = requests.post(
+        STORE_URL, data=formatDelete(), headers=HEADERS_UPDATE)
     if response.status_code != 204:
         response.raise_for_status()
+    print("Data deleted.")
 
 
 if __name__ == "__main__":

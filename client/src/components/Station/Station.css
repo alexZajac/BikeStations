@@ -11,11 +11,25 @@ p {
   cursor: pointer;
   border-radius: 20px;
   transition: all ease-in-out 0.2s;
+  animation: slipIn 0.9s ease-in-out 100ms;
 }
 
 .station-container:hover {
   box-shadow: 0 0 20px #999;
   transform: scale(1.02);
+}
+
+@keyframes slipIn {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+    box-shadow: 0 0 20px #999;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+    box-shadow: 0 0 20px transparent;
+  }
 }
 
 .picture-container {
@@ -45,6 +59,7 @@ p {
   justify-content: center;
   flex-direction: column;
   padding-left: 30px;
+  animation: slipIn ease-in-out 0.5s;
 }
 
 .main-infos {
@@ -74,12 +89,12 @@ p {
 .primary-info {
   font-size: 14px;
   font-weight: bold;
-  font-family: "Open Sans";
+  font-family: "Lato";
 }
 
 .secondary-info {
   font-size: 12px;
-  font-family: "Open Sans";
+  font-family: "Lato";
 }
 
 @media only screen and (max-width: 1280px) {

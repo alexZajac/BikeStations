@@ -5,52 +5,92 @@ import arrow
 import re
 from datetime import datetime
 import json
+import sys
+import asyncio
+from concurrent.futures import ThreadPoolExecutor as PoolExecutor
+import requests
 
 OWL_URL = "http://www.owl-ontologies.com/unnamed.owl#"
+MAX_WORKERS = 8
 
 
 def addDataInStore():
     delete()
-    print("Data deleted.")
-    addCitiesInfos()
-    addStations()
+    addCitiesInfosAsync()
+    addStationsAsync()
 
 
-def addStations():
-    normalizedData = getData()
-    print("Stations fetched.")
+def getStationsTriplets(normalizedData):
     tripletList = []
     for index, station in enumerate(normalizedData):
         stationRef = f"<{OWL_URL}BikeStation_{index}>"
         locationRef = f"<{OWL_URL}Location_{index}>"
-        tripletList.append(createTriplet(stationRef, "rdf:type", "ns:BikeStation"))
-        tripletList.append(createTriplet(locationRef, "rdf:type", "ns:Location"))
-        tripletList.append(createTriplet(stationRef, "ns:location", locationRef))
+        tripletList.append(createTriplet(
+            stationRef, "rdf:type", "ns:BikeStation"))
+        tripletList.append(createTriplet(
+            locationRef, "rdf:type", "ns:Location"))
+        tripletList.append(createTriplet(
+            stationRef, "ns:location", locationRef))
         for prop, value in station.items():
             propType, dest = switchType(prop)
             if dest == 'location':
                 if prop == 'city':
-                    tripletList.append(createTriplet(locationRef, propType, f"<{OWL_URL}{value}>"))
+                    tripletList.append(createTriplet(
+                        locationRef, propType, f"<{OWL_URL}{value}>"))
                 else:
-                    tripletList.append(createTriplet(locationRef, propType, value))
+                    tripletList.append(createTriplet(
+                        locationRef, propType, value))
             else:
                 # convert epoch time from milliseconds
                 if prop == "lastUpdate":
                     if isinstance(value, int):
-                        value = int(value/1000)
+                        value = int(value / 1000)
                     if isinstance(value, str):
-                        value =  arrow.get(value).timestamp
+                        value = arrow.get(value).timestamp
                 tripletList.append(createTriplet(stationRef, propType, value))
-        if index%5 == 0:
-            insertPayload = formatInsert(tripletList)
-            insert(insertPayload)
-            tripletList = []
+    return splitBy(tripletList, 12)
+
+
+def splitBy(values, n):
+    result = []
+    temp = []
+    for i, elm in enumerate(values):
+        temp.append(elm)
+        if not i % n:
+            result.append(temp)
+            temp = []
+    if len(temp):
+        result.append(temp)
+    return result
+
+
+async def addStations():
+    normalizedData = getData()
+    triplets = getStationsTriplets(normalizedData)
+    with PoolExecutor(max_workers=MAX_WORKERS) as executor:
+        with requests.Session() as session:
+            loop = asyncio.get_event_loop()
+            tasks = [
+                loop.run_in_executor(
+                    executor,
+                    insert,
+                    *(session, formatInsert(triplet))
+                )
+                for triplet in triplets
+            ]
+            for _ in await asyncio.gather(*tasks):
+                pass
+
+
+def addStationsAsync():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    future = asyncio.ensure_future(addStations())
+    loop.run_until_complete(future)
     print("Stations imported.")
 
 
-def addCitiesInfos():
-    weatherData = getWeatherData()
-    print("Cities Infos fetched.")
+def getCitiesTriplets(weatherData):
     tripletList = []
     for cityWeather in weatherData:
         cityName, temperature, pollutionIndex = cityWeather[
@@ -58,10 +98,36 @@ def addCitiesInfos():
         cityRef = f"<{OWL_URL}{cityName}>"
         tripletList.append(createTriplet(cityRef, "rdf:type", "ns:City"))
         tripletList.append(createTriplet(cityRef, "ns:cityName", cityName))
-        tripletList.append(createTriplet(cityRef, "ns:temperature", temperature))
-        tripletList.append(createTriplet(cityRef, "ns:pollutionIndex", pollutionIndex))
-    insertPayload = formatInsert(tripletList)
-    insert(insertPayload)
+        tripletList.append(createTriplet(
+            cityRef, "ns:temperature", temperature))
+        tripletList.append(createTriplet(
+            cityRef, "ns:pollutionIndex", pollutionIndex))
+    return tripletList
+
+
+async def addCities():
+    weatherData = getWeatherData()
+    print("Cities Infos fetched.")
+    triplets = getCitiesTriplets(weatherData)
+    with PoolExecutor(max_workers=MAX_WORKERS) as executor:
+        with requests.Session() as session:
+            loop = asyncio.get_event_loop()
+            tasks = [
+                loop.run_in_executor(
+                    executor,
+                    insert,
+                    *(session, formatInsert(triplets))
+                )
+            ]
+            for _ in await asyncio.gather(*tasks):
+                pass
+
+
+def addCitiesInfosAsync():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    future = asyncio.ensure_future(addCities())
+    loop.run_until_complete(future)
     print("Cities Infos imported.")
 
 
