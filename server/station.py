@@ -212,15 +212,21 @@ def formatCityDataResponse(cities):
             results.append(cityDict)
     return results
 
+def getBikeStation(city):
+    queryPayload = stationQuery(city)
+    results = query(queryPayload)
+    return formatBikeStationResponse(results)
+
+def getCityData(city):
+    queryPayload = cityQuery(city)
+    results = query(queryPayload)
+    return formatCityDataResponse(results)
+
 
 def getStation(stationType, city):
     if stationType == 'bikes':
-        queryPayload = stationQuery(city)
-        results = query(queryPayload)
-        stations = formatBikeStationResponse(results)
-        queryPayload = cityQuery(city)
-        results = query(queryPayload)
-        cityData = formatCityDataResponse(results)
+        stations = getBikeStation(city)
+        cityData = getCityData(city)
         return {
             "data": {
                 "city": cityData[0],
