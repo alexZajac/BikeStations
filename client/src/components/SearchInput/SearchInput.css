@@ -1,13 +1,12 @@
 .input-container {
   display: flex;
-  width: 100%;
+  width: 94%;
   align-items: flex-start;
   justify-content: center;
   border: solid 1px #ddd;
   border-radius: 10px;
   padding: 8px;
-  margin-top: 4vh;
-  margin-bottom: 3vh;
+  margin: 10px 0 10px 0;
 }
 
 .search-input {

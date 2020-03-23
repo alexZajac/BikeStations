@@ -18,6 +18,18 @@
   cursor: pointer;
 }
 
+@keyframes markerAnim {
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 @media only screen and (max-width: 920px) {
   .map-container {
     width: 100vw;

@@ -1,7 +1,7 @@
 .row-inputs-trip {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 30vw;
 }
 
@@ -11,4 +11,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.start-button {
+  width: 8vw;
+  height: 40px;
+  border-radius: 60px;
+  background-color: #00f7a8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: all ease-in-out 0.2s;
+}
+
+.start-button:hover {
+  opacity: 0.66;
+  letter-spacing: 4px;
 }

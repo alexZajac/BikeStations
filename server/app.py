@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from station import addDataInStore, getStation
-from ride import getRide
+from trip import getTrip
 
 app = Flask(__name__)
 api = Api(app)
@@ -12,7 +12,8 @@ class Home(Resource):
         return {
             "ack": True
         }
-    
+
+
 class AddData(Resource):
     def get(self):
         addDataInStore()
@@ -32,7 +33,7 @@ class Station(Resource):
         return getStation(args['type'], args['city'])
 
 
-class Ride(Resource):
+class Trip(Resource):
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('start',  required=True,
@@ -40,11 +41,12 @@ class Ride(Resource):
         parser.add_argument('end',  required=True,
                             help='end cannot be blank!')
         args = parser.parse_args()
-        return getRide(args['start'],args['end'])
+        return getTrip(args['start'], args['end'])
+
 
 api.add_resource(Station, '/v1/station')
 api.add_resource(AddData, '/v1/addData')
-api.add_resource(Ride, '/v1/ride')
+api.add_resource(Trip, '/v1/trip')
 api.add_resource(Home, '/')
 
 if __name__ == "__main__":

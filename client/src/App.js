@@ -8,8 +8,9 @@ const App = () => {
   const [stations, setStations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(defaultOptions);
-  const [stationFocus, setStationFocus] = useState(null);
+  const [focus, setFocus] = useState(null);
   const [cityData, setCityData] = useState(null);
+  const [tripData, setTripData] = useState(null);
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -41,7 +42,7 @@ const App = () => {
           temperature: 18.2,
           pollutionIndex: 24
         };
-        setStationFocus(null);
+        setFocus(null);
         setCityData(cityData);
         setStations(stations);
       } catch (e) {
@@ -67,13 +68,16 @@ const App = () => {
         filters={filters}
         setFilters={setFilters}
         loading={loading}
-        setStationFocus={setStationFocus}
-        stationFocus={stationFocus}
+        setFocus={setFocus}
+        focus={focus}
+        tripData={tripData}
+        setTripData={setTripData}
       />
       <MapContainer
         stations={stations}
-        setStationFocus={setStationFocus}
-        stationFocus={stationFocus}
+        setFocus={setFocus}
+        focus={focus}
+        tripData={tripData}
       />
     </div>
   );

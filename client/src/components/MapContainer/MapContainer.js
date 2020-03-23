@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from "react";
 import "./MapContainer.css";
-import ReactMapGL, { Marker, CanvasOverlay } from "react-map-gl";
+import ReactMapGL, {
+  Marker,
+  CanvasOverlay,
+  WebMercatorViewport,
+  FlyToInterpolator
+} from "react-map-gl";
 
+import marker_begin from "../../assets/marker_begin.png";
+import marker_dest from "../../assets/marker_dest.png";
 import marker_bike from "../../assets/marker_bike.png";
 
 import "./MapContainer.css";
-import { defaultMapState, coordinates } from "../../Constants";
+import {
+  defaultMapState,
+  coordinates,
+  MAP_TRANSITION_DURATION
+} from "../../Constants";
 
 const PolylineOverlay = props => {
-  const _redraw = ({ width, height, ctx, isDragging, project, unproject }) => {
+  const _redraw = ({ width, height, ctx, isDragging, project }) => {
     const {
       points,
-      color = "#00f7a8",
-      lineWidth = 2,
+      color = "black",
+      lineWidth = 4,
       renderWhileDragging = true
     } = props;
     ctx.clearRect(0, 0, width, height);
@@ -32,9 +43,8 @@ const PolylineOverlay = props => {
   return <CanvasOverlay redraw={_redraw} />;
 };
 
-const MapContainer = ({ stations, setStationFocus, stationFocus }) => {
+const MapContainer = ({ stations, setFocus, focus, tripData }) => {
   const [state, setState] = useState(defaultMapState);
-
   useEffect(() => {
     if (stations.length > 0) {
       const { city } = stations[0];
@@ -45,16 +55,50 @@ const MapContainer = ({ stations, setStationFocus, stationFocus }) => {
           ...state.viewport,
           zoom: 12,
           latitude,
-          longitude
+          longitude,
+          transitionDuration: MAP_TRANSITION_DURATION,
+          transitionInterpolator: new FlyToInterpolator()
         }
       });
     }
   }, [stations, coordinates]);
 
+  useEffect(() => {
+    if (tripData !== null) {
+      const points = getPointsFromTrip(tripData);
+      console.log(points);
+      const { longitude, latitude, zoom } = new WebMercatorViewport(
+        state.viewport
+      ).fitBounds(points, {
+        padding: 100
+      });
+      setState({
+        ...state,
+        viewport: {
+          ...state.viewport,
+          zoom,
+          latitude,
+          longitude,
+          transitionDuration: MAP_TRANSITION_DURATION,
+          transitionInterpolator: new FlyToInterpolator()
+        }
+      });
+    }
+  }, [tripData]);
+
+  const getPointsFromTrip = tripData => {
+    if (tripData !== null) {
+      return tripData.map(s => [s.longitude, s.latitude]);
+    }
+    return null;
+  };
+
+  const points = getPointsFromTrip(tripData);
+
   const renderStations = () => {
     let renderStations = stations;
-    if (stationFocus !== null)
-      renderStations = renderStations.filter(s => s._id === stationFocus);
+    if (focus !== null)
+      renderStations = renderStations.filter(s => s._id === focus);
     return renderStations.map(s => {
       const { _id, latitude, longitude } = s;
       return (
@@ -70,13 +114,51 @@ const MapContainer = ({ stations, setStationFocus, stationFocus }) => {
               src={marker_bike}
               className="marker-station"
               alt="Marker station"
-              onClick={() => setStationFocus(_id)}
+              onClick={() => setFocus(_id)}
             />
           </div>
         </Marker>
       );
     });
   };
+
+  const renderTripPath = () => (
+    <>
+      <PolylineOverlay points={points} />
+      <Marker
+        key={0}
+        longitude={points[0][0]}
+        latitude={points[0][1]}
+        offsetLeft={-50}
+        offsetTop={-75}
+      >
+        <div className="container-user-marker">
+          <img
+            src={marker_begin}
+            className="marker-station"
+            alt="Marker begin"
+            style={{ animation: "markerAnim 3s ease-in-out infinite" }}
+          />
+        </div>
+      </Marker>
+      <Marker
+        key={1}
+        longitude={points[1][0]}
+        latitude={points[1][1]}
+        offsetLeft={-50}
+        offsetTop={-75}
+      >
+        <div className="container-user-marker">
+          <img
+            src={marker_dest}
+            className="marker-station"
+            alt="Marker dest"
+            style={{ animation: "markerAnim 3s ease-in-out infinite 0.6s" }}
+          />
+        </div>
+      </Marker>
+    </>
+  );
 
   return (
     <div className="map-container">
@@ -92,18 +174,14 @@ const MapContainer = ({ stations, setStationFocus, stationFocus }) => {
               ...state.viewport,
               zoom: viewport.zoom,
               latitude: viewport.latitude,
-              longitude: viewport.longitude
+              longitude: viewport.longitude,
+              transitionDuration: 0
             }
           });
         }}
       >
-        {/* {renderStations()} */}
-        <PolylineOverlay
-          points={[
-            [2.266552, 48.906463],
-            [2.238354, 48.894077]
-          ]}
-        />
+        {renderStations()}
+        {tripData !== null && renderTripPath()}
       </ReactMapGL>
     </div>
   );

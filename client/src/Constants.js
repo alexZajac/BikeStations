@@ -161,8 +161,8 @@ const coordinates = {
 
 const defaultMapState = {
   viewport: {
-    width: "100%",
-    height: "100vh",
+    width: window.innerWidth * 0.6,
+    height: window.innerHeight,
     latitude: 48.8534,
     longitude: 2.3488,
     zoom: 12
@@ -170,11 +170,33 @@ const defaultMapState = {
 };
 
 const getPollutionData = value => {
-  if (value < 51) return ["#009966", "Good", "Air quality is considered satisfactory, and air pollution poses little or no risk."]
-  else if(value < 101) return ["#FFDE33", "Moderate", "Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution."]
-  else if(value < 151) return ["#FF9933", "Unhealthy for Sensitive Groups", "Members of sensitive groups may experience health effects. The general public is not likely to be affected."]
-  else return ["#CC0033", "Unhealthy", "Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects."]
-}
+  if (value < 51)
+    return [
+      "#009966",
+      "Good",
+      "Air quality is considered satisfactory, and air pollution poses little or no risk."
+    ];
+  else if (value < 101)
+    return [
+      "#FFDE33",
+      "Moderate",
+      "Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution."
+    ];
+  else if (value < 151)
+    return [
+      "#FF9933",
+      "Unhealthy for Sensitive Groups",
+      "Members of sensitive groups may experience health effects. The general public is not likely to be affected."
+    ];
+  else
+    return [
+      "#CC0033",
+      "Unhealthy",
+      "Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects."
+    ];
+};
+
+const MAP_TRANSITION_DURATION = 3000;
 
 export {
   defaultOptions,
@@ -183,5 +205,6 @@ export {
   cityOptions,
   refreshOptions,
   coordinates,
-  getPollutionData
+  getPollutionData,
+  MAP_TRANSITION_DURATION
 };

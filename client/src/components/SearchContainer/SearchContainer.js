@@ -23,8 +23,10 @@ const SearchContainer = ({
   setFilters,
   loading,
   stations,
-  stationFocus,
-  setStationFocus
+  focus,
+  setFocus,
+  tripData, 
+  setTripData
 }) => {
   const [viewportWidth, setViewportWidth] = useState(
     document.documentElement.clientWidth
@@ -85,20 +87,25 @@ const SearchContainer = ({
   const renderStations = () => {
     let renderStations = stations;
     let resetButton = null;
-    if (stationFocus !== null) {
+    if (focus !== null) {
       resetButton = (
-        <div onClick={() => setStationFocus(null)} className="reset-button">
+        <div onClick={() => setFocus(null)} className="reset-button">
           <p className="reset-text">RESET</p>
         </div>
       );
-      renderStations = renderStations.filter(s => s._id === stationFocus);
+      renderStations = renderStations.filter(s => s._id === focus);
     }
     return (
       <div className="content-wrapper">
         {loading
           ? [null, null, null].map((_, i) => <SkeletonStation key={i} />)
           : renderStations.map((s, index) => (
-              <Station key={s._id} index={index} {...s} />
+              <Station
+                key={s._id}
+                index={index}
+                setFocus={setFocus}
+                {...s}
+              />
             ))}
         {resetButton}
       </div>
@@ -119,13 +126,11 @@ const SearchContainer = ({
       <div className="content-wrapper">
         <p className="city">{name}</p>
         <div className="part-weather">
-          <p className="title-part-weather">TEMPERATURE</p>
           <p className="important-text-weather">
             {getTemperature(temperature)}
           </p>
         </div>
         <div className="part-weather">
-          <p className="title-part-weather">POLLUTION INDEX</p>
           <div className="row">
             <div className="pollution-color" style={{ backgroundColor: color }}>
               <p className="important-text-weather">{pollutionIndex}</p>
@@ -156,8 +161,8 @@ const SearchContainer = ({
       </TabList>
       <TabPanel>{renderStations()}</TabPanel>
       <TabPanel>{renderWeatherData()}</TabPanel>
-      <TabPanel>
-        <Trip />
+      <TabPanel style={{ width: "100%" }}>
+        <Trip tripData={tripData} setTripData={setTripData} />
       </TabPanel>
     </Tabs>
   );

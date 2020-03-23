@@ -20,14 +20,15 @@ import Skeleton from "react-loading-skeleton";
 // }
 
 const Station = ({
-  index,
+  _id,
   city,
   name,
   address,
   capacity,
   freeSlot,
   availableBikes,
-  lastUpdate
+  lastUpdate,
+  customImage
 }) => {
   const getLocation = () => `${address === null ? "" : address + ","} ${city}`;
   const getSlots = () => `${freeSlot} slots remaining on ${capacity}`;
@@ -89,7 +90,11 @@ const Station = ({
 
   const renderPicture = () => (
     <div className="picture-container">
-      <img src={station_img} alt="station" className="station-picture" />
+      <img
+        src={customImage !== undefined ? customImage : station_img}
+        alt="station"
+        className="station-picture"
+      />
     </div>
   );
 
