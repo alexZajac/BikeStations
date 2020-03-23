@@ -16,10 +16,11 @@ import Skeleton from "react-loading-skeleton";
 //   "capacity": 20,
 //   "freeSlot": 3,
 //   "availableBikes": 17,
-//   "lastUpdate": "2020-03-20 10:30:00"
+//   "lastUpdate": 1584871619
 // }
 
 const Station = ({
+  index,
   city,
   name,
   address,
@@ -37,7 +38,21 @@ const Station = ({
         : availableBikes + " bikes available for rent"
     }`;
   const getLastUpdate = () =>
-    `${lastUpdate === null ? "Not available" : lastUpdate + " (last update)"}`;
+    `${lastUpdate === null ? "Not available" : convertToTime(lastUpdate)}`;
+
+  const convertToTime = timestamp => {
+    const pad = n => (n < 10 ? `0${n}` : n);
+    const date = new Date(timestamp * 1000);
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    return `${pad(day)}/${pad(month)}/${year} at ${pad(hours)}:${pad(
+      minutes
+    )}:${pad(seconds)}`;
+  };
 
   const renderContent = () => (
     <div className="content-container">

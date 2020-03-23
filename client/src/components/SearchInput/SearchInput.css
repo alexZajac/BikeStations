@@ -1,0 +1,31 @@
+.input-container {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  border: solid 1px #ddd;
+  border-radius: 10px;
+  padding: 8px;
+  margin-top: 4vh;
+  margin-bottom: 3vh;
+}
+
+.search-input {
+  font-family: "Lato";
+  outline: none;
+  border: none;
+  font-size: 14px;
+  width: 20vw;
+}
+
+@media only screen and (max-width: 940px) {
+  .search-input {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (max-width: 620px) {
+  .search-input {
+    font-size: 16px;
+  }
+}

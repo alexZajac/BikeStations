@@ -26,6 +26,25 @@
   height: 8vh;
 }
 
+.reset-button {
+  width: 8vw;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00f7a8;
+  cursor: pointer;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.reset-text {
+  letter-spacing: 4px;
+  font-family: "Lato";
+  font-size: 16px;
+  color: white;
+}
+
 .filters-container {
   display: flex;
   width: 100%;
@@ -41,14 +60,113 @@
   justify-content: center;
 }
 
-.stations-wrapper {
+.content-wrapper {
   width: 100%;
+  min-height: 70vh;
   flex: 1;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   display: flex;
   flex-direction: column;
   margin-bottom: 5vh;
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.tablist {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-inline-start: 0;
+}
+
+.tab {
+  flex: 1;
+  border: none;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  list-style-type: none;
+  font-size: 14px;
+  font-family: "Lato";
+  font-weight: bold;
+  color: #aaa;
+  transition: all ease-in-out 0.2s;
+  cursor: pointer;
+  border-bottom: solid 2px transparent;
+}
+
+.tab:hover {
+  letter-spacing: 2px;
+}
+
+.active-tab {
+  border-bottom: solid 2px #00f7a8 !important;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    rgba(0, 247, 168, 0.33) 5%,
+    rgba(0, 247, 168, 0.25) 15%,
+    rgba(0, 247, 168, 0.1) 33%,
+    transparent 70%
+  ) !important;
+}
+
+.city {
+  font-family: "Playfair Display";
+  font-weight: bold;
+  font-size: 60px;
+}
+
+.part-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 6vh;
+}
+
+.title-part-weather {
+  font-family: "Lato";
+  font-weight: bold;
+  letter-spacing: 4px;
+  font-size: 18px;
+}
+
+.important-text-weather {
+  font-family: "Lato";
+  font-size: 36px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0 20px 0;
+}
+
+.pollution-color {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: solid 2px black;
+  padding: 10px;
+  margin-right: 20px;
+}
+
+.desc-pollution {
+  font-family: "Lato";
+  font-size: 20px;
+  font-style: italic;
 }
 
 @media only screen and (max-width: 480px) {
@@ -72,5 +190,8 @@
   }
   .logo {
     margin-top: 10px;
+  }
+  .city {
+    font-size: 46px;
   }
 }

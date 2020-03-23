@@ -1,13 +1,38 @@
 import React, { useState, useEffect } from "react";
 import "./MapContainer.css";
-import ReactMapGL, { Marker } from "react-map-gl";
+import ReactMapGL, { Marker, CanvasOverlay } from "react-map-gl";
 
 import marker_bike from "../../assets/marker_bike.png";
 
 import "./MapContainer.css";
 import { defaultMapState, coordinates } from "../../Constants";
 
-const MapContainer = ({ stations }) => {
+const PolylineOverlay = props => {
+  const _redraw = ({ width, height, ctx, isDragging, project, unproject }) => {
+    const {
+      points,
+      color = "#00f7a8",
+      lineWidth = 2,
+      renderWhileDragging = true
+    } = props;
+    ctx.clearRect(0, 0, width, height);
+    ctx.globalCompositeOperation = "lighter";
+
+    if ((renderWhileDragging || !isDragging) && points) {
+      ctx.lineWidth = lineWidth;
+      ctx.strokeStyle = color;
+      ctx.beginPath();
+      points.forEach(point => {
+        const pixel = project([point[0], point[1]]);
+        ctx.lineTo(pixel[0], pixel[1]);
+      });
+      ctx.stroke();
+    }
+  };
+  return <CanvasOverlay redraw={_redraw} />;
+};
+
+const MapContainer = ({ stations, setStationFocus, stationFocus }) => {
   const [state, setState] = useState(defaultMapState);
 
   useEffect(() => {
@@ -26,29 +51,32 @@ const MapContainer = ({ stations }) => {
     }
   }, [stations, coordinates]);
 
-  const renderStations = () =>
-    stations.map((s, i) => {
+  const renderStations = () => {
+    let renderStations = stations;
+    if (stationFocus !== null)
+      renderStations = renderStations.filter(s => s._id === stationFocus);
+    return renderStations.map(s => {
       const { _id, latitude, longitude } = s;
-      if (i > 0) {
-        return (
-          <Marker
-            key={_id}
-            latitude={latitude}
-            longitude={longitude}
-            offsetLeft={-50}
-            offsetTop={-75}
-          >
-            <div className="container-user-marker">
-              <img
-                src={marker_bike}
-                className="marker-station"
-                alt="Marker station"
-              />
-            </div>
-          </Marker>
-        );
-      }
+      return (
+        <Marker
+          key={_id}
+          latitude={latitude}
+          longitude={longitude}
+          offsetLeft={-50}
+          offsetTop={-75}
+        >
+          <div className="container-user-marker">
+            <img
+              src={marker_bike}
+              className="marker-station"
+              alt="Marker station"
+              onClick={() => setStationFocus(_id)}
+            />
+          </div>
+        </Marker>
+      );
     });
+  };
 
   return (
     <div className="map-container">
@@ -69,7 +97,13 @@ const MapContainer = ({ stations }) => {
           });
         }}
       >
-        {renderStations()}
+        {/* {renderStations()} */}
+        <PolylineOverlay
+          points={[
+            [2.266552, 48.906463],
+            [2.238354, 48.894077]
+          ]}
+        />
       </ReactMapGL>
     </div>
   );
