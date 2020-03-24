@@ -1,6 +1,6 @@
 import requests
 
-STORE_URL = "http://192.168.99.101:3030/bikestation"
+STORE_URL = "http://localhost:3030/bikestation"
 
 HEADERS_QUERY = {'Content-type': 'application/sparql-query'}
 HEADERS_UPDATE = {'Content-type': 'application/sparql-update'}
