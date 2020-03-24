@@ -215,6 +215,7 @@ def formatCityDataResponse(cities):
 def getBikeStation(city,realTime):
     if realTime:
         stations = getData(city)
+        print(len(stations))
         for i, station in enumerate(stations):
             station['_id'] = i
             station['city'] = city

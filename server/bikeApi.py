@@ -88,7 +88,13 @@ def getData(city=None):
                 mappings = [mappings[index]]
                 cityFound = True
             index += 1
-    with PoolExecutor(max_workers=MAX_WORKERS) as executor:
-        for _ in executor.map(get_data_from_mapping, mappings):
-            pass
+    # with PoolExecutor(max_workers=MAX_WORKERS) as executor:
+    #     for _ in executor.map(get_data_from_mapping, mappings):
+    #         pass
+    normalizedData = []
+    for mapping in mappings:
+        for url in mapping['url']:
+            data = fetchApi(url, mapping['dataType'], mapping['pathToArray'])
+            if data:
+                normalizeData(data, mapping, normalizedData)
     return normalizedData
