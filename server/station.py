@@ -143,9 +143,9 @@ def createTriplet(subject, predicate, objectValue):
 
 
 def switchType(paramType):
-    if paramType == 'long':
+    if paramType == 'longitude':
         return ("ns:long", 'location')
-    elif paramType == 'lat':
+    elif paramType == 'latitude':
         return ("ns:lat", 'location')
     elif paramType == 'name':
         return ("ns:name", 'location')
@@ -212,21 +212,34 @@ def formatCityDataResponse(cities):
             results.append(cityDict)
     return results
 
-def getBikeStation(city):
-    queryPayload = stationQuery(city)
-    results = query(queryPayload)
-    return formatBikeStationResponse(results)
+def getBikeStation(city,realTime):
+    if realTime:
+        stations = getData(city)
+        print(len(stations))
+        for i, station in enumerate(stations):
+            station['_id'] = i
+            station['city'] = city
+        return stations
+    else:
+        queryPayload = stationQuery(city)
+        results = query(queryPayload)
+        return formatBikeStationResponse(results)
 
-def getCityData(city):
-    queryPayload = cityQuery(city)
-    results = query(queryPayload)
-    return formatCityDataResponse(results)
+def getCityData(city,realTime):
+    if realTime:
+        cityData = getWeatherData(city)
+        cityData[0]['cityName'] = city
+        return cityData
+    else:
+        queryPayload = cityQuery(city)
+        results = query(queryPayload)
+        return formatCityDataResponse(results)
 
 
-def getStation(stationType, city):
+def getStation(stationType, city, realTime):
     if stationType == 'bikes':
-        stations = getBikeStation(city)
-        cityData = getCityData(city)
+        stations = getBikeStation(city,realTime)
+        cityData = getCityData(city,realTime)
         return {
             "data": {
                 "city": cityData[0],

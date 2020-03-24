@@ -44,8 +44,16 @@ def normalizeData(data, mapping, normalizedData):
     normalizedData.append(weatherData)
 
 
-def getWeatherData():
+def getWeatherData(city=None):
     mappings = readMapping()
+    if city:
+        cityFound = False
+        index = 0
+        while not cityFound and index < len(mappings):
+            if mappings[index]['city'] == city:
+                mappings = [mappings[index]]
+                cityFound = True
+            index += 1
     normalizedData = []
     for mapping in mappings:
         for url in mapping['url']:

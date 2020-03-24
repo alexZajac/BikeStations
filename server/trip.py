@@ -33,7 +33,7 @@ def findNearestStation(coordinates, stations, paramLook):
     return nearestStation
 
 
-def getTrip(start, end):
+def getTrip(start, end, realTime):
     startCoordinates = getCoordinates(start)
     endCoordinates = getCoordinates(end)
     # startCoordinates = (48.8953928, 2.2775785)
@@ -41,8 +41,8 @@ def getTrip(start, end):
 
     city = findCity(startCoordinates)
 
-    cityData = getCityData(city)
-    stations = getBikeStation(city)
+    cityData = getCityData(city,realTime)
+    stations = getBikeStation(city,realTime)
 
     startStation = findNearestStation(
         startCoordinates, stations, "availableBikes")

@@ -29,8 +29,10 @@ class Station(Resource):
                             help='City cannot be blank!')
         parser.add_argument('type',  required=True,
                             help='Type cannot be blank!')
+        parser.add_argument('realtime',  required=True,
+                            help='end cannot be blank!')
         args = parser.parse_args()
-        return getStation(args['type'], args['city'])
+        return getStation(args['type'], args['city'], 'true' == args['realtime'].lower())
 
 
 class Trip(Resource):
@@ -40,12 +42,14 @@ class Trip(Resource):
                             help='start cannot be blank!')
         parser.add_argument('end',  required=True,
                             help='end cannot be blank!')
+        parser.add_argument('realtime',  required=True,
+                            help='end cannot be blank!')
         args = parser.parse_args()
-        return getTrip(args['start'], args['end'])
+        return getTrip(args['start'], args['end'], 'true' == args['realtime'].lower())
 
 
 api.add_resource(Station, '/v1/station')
-api.add_resource(AddData, '/v1/addData')
+api.add_resource(AddData, '/v1/updateData')
 api.add_resource(Trip, '/v1/trip')
 api.add_resource(Home, '/')
 
