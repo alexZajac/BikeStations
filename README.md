@@ -1,4 +1,4 @@
-# Cmanticz : Web Semantics final project
+# BikeStation : Web Semantics final project
 
 ## Table of content
  - Project Description and Requirements

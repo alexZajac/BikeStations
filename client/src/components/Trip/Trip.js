@@ -33,6 +33,7 @@ const Trip = ({ tripData, setTripData, filters }) => {
       )}&realtime=${isRealtime}`;
       const response = await axios(url);
       const { data: respData } = response;
+      console.log(respData);
       const {
         data: { stations }
       } = respData;
@@ -46,7 +47,8 @@ const Trip = ({ tripData, setTripData, filters }) => {
       <div className="content-wrapper">
         {loading
           ? [null, null].map((_, i) => <SkeletonStation key={i} />)
-          : tripData !== null && (
+          : tripData !== null &&
+            tripData.length > 0 && (
               <>
                 <Station
                   key={tripData[0]._id}
@@ -79,7 +81,7 @@ const Trip = ({ tripData, setTripData, filters }) => {
           style={{ marginTop: "10px" }}
         />
       </div>
-      <div className="column">
+      <div className="column" style={{ flex: 4 }}>
         <SearchInput
           inputValue={from}
           setInputValue={setFrom}

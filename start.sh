@@ -8,4 +8,4 @@ rm -rf ./fuseki/templates
 rm -rf ./fuseki/config.ttl
 rm -rf ./fuseki/shiro.ini
 
-dokcer-compose up
+docker-compose up --build

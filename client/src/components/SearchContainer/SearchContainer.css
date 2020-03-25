@@ -119,6 +119,7 @@
     rgba(0, 247, 168, 0.1) 33%,
     transparent 70%
   ) !important;
+  color: black !important;
 }
 
 .city {

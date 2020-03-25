@@ -21,11 +21,11 @@ const App = () => {
       } = filters;
       const isRealtime = realtime === "Realtime data";
       try {
-        const url = `/api/v1/station?city=${value}&type=bikes&realtime=True`;
+        const url = `/api/v1/station?city=${value}&type=bikes&realtime=${isRealtime}`;
         const response = await axios(url);
         const { data: respData } = response;
         const { data } = respData;
-        const { stations, city } = data;
+        const { stations, city: cityData } = data;
         setFocus(null);
         setCityData(cityData);
         setStations(stations);

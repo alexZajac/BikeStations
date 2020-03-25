@@ -45,6 +45,18 @@ const PolylineOverlay = props => {
 
 const MapContainer = ({ stations, setFocus, focus, tripData }) => {
   const [state, setState] = useState(defaultMapState);
+  const [viewportWidth, setViewportWidth] = useState(
+    document.documentElement.clientWidth
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportWidth(document.documentElement.clientWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     if (stations.length > 0) {
       const { city } = stations[0];
@@ -64,9 +76,8 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
   }, [stations, coordinates]);
 
   useEffect(() => {
-    if (tripData !== null) {
+    if (tripData !== null && tripData.length > 0) {
       const points = getPointsFromTrip(tripData);
-      console.log(points);
       const { longitude, latitude, zoom } = new WebMercatorViewport(
         state.viewport
       ).fitBounds(points, {
@@ -87,7 +98,7 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
   }, [tripData]);
 
   const getPointsFromTrip = tripData => {
-    if (tripData !== null) {
+    if (tripData !== null && tripData.length > 0) {
       return tripData.map(s => [s.longitude, s.latitude]);
     }
     return null;
@@ -163,15 +174,17 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
     </>
   );
 
+  const getMapWidth = () => (viewportWidth > 920 ? "60vw" : "100vw");
+
   return (
     <div className="map-container">
       <ReactMapGL
         className="mapboxgl-map"
         {...state.viewport}
         mapStyle="mapbox://styles/mapbox/outdoors-v11"
+        width={getMapWidth()}
         mapboxApiAccessToken="pk.eyJ1IjoiYWxleHphamFjIiwiYSI6ImNrNnR2cTh1ZTAzODAzZXA3MTZrMG1vd2MifQ.b7r-Znl2mfjKgkeQDPF8tg"
         onViewportChange={viewport => {
-          console.log(viewport);
           setState({
             ...state,
             viewport: {
@@ -185,7 +198,7 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
         }}
       >
         {renderStations()}
-        {tripData !== null && renderTripPath()}
+        {tripData !== null && tripData.length > 0 && renderTripPath()}
       </ReactMapGL>
     </div>
   );
