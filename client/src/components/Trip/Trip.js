@@ -24,38 +24,12 @@ const Trip = ({ tripData, setTripData }) => {
 
   useEffect(() => {
     const fetchTrip = async () => {
-      const url = `/v1/trip?start=${encodeURI(from)}&end=${encodeURI(to)}`;
-      // const response = await axios(url);
+      const url = `api/v1/trip?start=${encodeURI(from)}&end=${encodeURI(to)}&realtime=True`;
+      const response = await axios(url);
       // const {
       //   data: { stations }
       // } = response;
-      const stations = [
-        {
-          _id: "BikeStation_0",
-          city: "Paris",
-          name: "Perrache Est",
-          address: "48 Cours Suchet",
-          latitude: 48.8534,
-          longitude: 2.3488,
-          capacity: 20,
-          freeSlot: 3,
-          availableBikes: 17,
-          lastUpdate: 1584871619
-        },
-        {
-          _id: "BikeStation_1",
-          city: "Paris",
-          name: "Perrache Est",
-          address: "48 Cours Suchet",
-          latitude: 48.113,
-          longitude: -1.681,
-          capacity: 20,
-          freeSlot: 3,
-          availableBikes: 17,
-          lastUpdate: 1584871619
-        }
-      ];
-      setTimeout(() => setTripData(stations), 3000);
+      setTripData(response['data']['stations'])
     };
     if (loading) fetchTrip();
   }, [loading]);
