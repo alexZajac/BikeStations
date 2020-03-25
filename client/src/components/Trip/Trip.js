@@ -13,7 +13,7 @@ import { Station, SkeletonStation } from "../Station";
 
 import { FaMapMarkerAlt, FaLocationArrow } from "react-icons/fa";
 
-const Trip = ({ tripData, setTripData }) => {
+const Trip = ({ tripData, setTripData, filters }) => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,38 +24,19 @@ const Trip = ({ tripData, setTripData }) => {
 
   useEffect(() => {
     const fetchTrip = async () => {
-      const url = `/v1/trip?start=${encodeURI(from)}&end=${encodeURI(to)}`;
-      // const response = await axios(url);
-      // const {
-      //   data: { stations }
-      // } = response;
-      const stations = [
-        {
-          _id: "BikeStation_0",
-          city: "Paris",
-          name: "Perrache Est",
-          address: "48 Cours Suchet",
-          latitude: 48.8534,
-          longitude: 2.3488,
-          capacity: 20,
-          freeSlot: 3,
-          availableBikes: 17,
-          lastUpdate: 1584871619
-        },
-        {
-          _id: "BikeStation_1",
-          city: "Paris",
-          name: "Perrache Est",
-          address: "48 Cours Suchet",
-          latitude: 48.113,
-          longitude: -1.681,
-          capacity: 20,
-          freeSlot: 3,
-          availableBikes: 17,
-          lastUpdate: 1584871619
-        }
-      ];
-      setTimeout(() => setTripData(stations), 3000);
+      const {
+        realtimeOption: { value: realtime }
+      } = filters;
+      const isRealtime = realtime === "Realtime data";
+      const url = `/v1/trip?start=${encodeURI(from)}&end=${encodeURI(
+        to
+      )}&realtime=${isRealtime}`;
+      const response = await axios(url);
+      const { data: respData } = response;
+      const {
+        data: { stations }
+      } = respData;
+      setTripData(stations);
     };
     if (loading) fetchTrip();
   }, [loading]);
@@ -102,7 +83,7 @@ const Trip = ({ tripData, setTripData }) => {
         <SearchInput
           inputValue={from}
           setInputValue={setFrom}
-          placeholder="Départ"
+          placeholder="Start"
         />
         <SearchInput
           inputValue={to}

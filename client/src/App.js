@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { defaultOptions } from "./Constants";
 import "./App.css";
-import { MapContainer, SearchContainer } from "./components";
+import { MapContainer, SearchContainer, ModalLoading } from "./components";
 
 const App = () => {
   const [stations, setStations] = useState([]);
@@ -11,37 +11,23 @@ const App = () => {
   const [focus, setFocus] = useState(null);
   const [cityData, setCityData] = useState(null);
   const [tripData, setTripData] = useState(null);
+  const [refreshData, setRefreshData] = useState(false);
 
   useEffect(() => {
     const fetchStations = async () => {
       const {
-        city: { value }
+        city: { value },
+        realtimeOption: { value: realtime }
       } = filters;
+      const isRealtime = realtime === "Realtime data";
       try {
-        const url = `/v1/station?city=${value}&type=bikes`;
-        // const response = await axios(url);
-        // const { data: respData } = response;
-        // const { data } = respData;
-        // const { stations, city } = data;
-        // console.log(city);
-        // console.log(stations);
-        const stations = [null, null, null].map((_, i) => ({
-          _id: "BikeStation_" + i,
-          city: "Paris",
-          name: "Perrache Est",
-          address: "48 Cours Suchet",
-          latitude: 34.052234,
-          longitude: -118.243685,
-          capacity: 20,
-          freeSlot: 3,
-          availableBikes: 17,
-          lastUpdate: 1584871619
-        }));
-        const cityData = {
-          name: "Paris",
-          temperature: 18.2,
-          pollutionIndex: 24
-        };
+        const url = `/v1/station?city=${value}&type=bikes&realtime=${isRealtime}`;
+        const response = await axios(url);
+        const { data: respData } = response;
+        const { data } = respData;
+        const { stations, city: cityData } = data;
+        console.log(cityData);
+        console.log(stations);
         setFocus(null);
         setCityData(cityData);
         setStations(stations);
@@ -60,6 +46,19 @@ const App = () => {
     setLoading(true);
   }, [filters]);
 
+  useEffect(() => {
+    const refreshDataAsync = async () => {
+      try {
+        const url = `/v1/updateData`;
+        const _ = await axios(url);
+        setRefreshData(false);
+      } catch (e) {
+        alert(e);
+      }
+    };
+    if (refreshData) refreshDataAsync();
+  }, [refreshData]);
+
   return (
     <div className="app">
       <SearchContainer
@@ -72,6 +71,7 @@ const App = () => {
         focus={focus}
         tripData={tripData}
         setTripData={setTripData}
+        setRefreshData={setRefreshData}
       />
       <MapContainer
         stations={stations}
@@ -79,6 +79,7 @@ const App = () => {
         focus={focus}
         tripData={tripData}
       />
+      <ModalLoading refreshData={refreshData} />
     </div>
   );
 };

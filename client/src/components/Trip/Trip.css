@@ -31,3 +31,12 @@
   opacity: 0.66;
   letter-spacing: 4px;
 }
+
+@media only screen and (max-width: 920px) {
+  .start-button {
+    width: 20vw;
+  }
+  .row-inputs-trip {
+    width: 70vw;
+  }
+}

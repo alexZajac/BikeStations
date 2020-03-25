@@ -43,9 +43,9 @@ const Station = ({
 
   const convertToTime = timestamp => {
     const pad = n => (n < 10 ? `0${n}` : n);
-    const date = new Date(timestamp * 1000);
+    const date = new Date(timestamp);
     const day = date.getDate();
-    const month = date.getMonth();
+    const month = date.getMonth() + 1;
     const year = date.getFullYear();
     const hours = date.getHours();
     const minutes = date.getMinutes();

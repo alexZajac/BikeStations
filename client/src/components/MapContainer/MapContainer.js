@@ -99,6 +99,9 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
     let renderStations = stations;
     if (focus !== null)
       renderStations = renderStations.filter(s => s._id === focus);
+    if (tripData !== null) {
+      renderStations = [];
+    }
     return renderStations.map(s => {
       const { _id, latitude, longitude } = s;
       return (
@@ -168,6 +171,7 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
         mapStyle="mapbox://styles/mapbox/outdoors-v11"
         mapboxApiAccessToken="pk.eyJ1IjoiYWxleHphamFjIiwiYSI6ImNrNnR2cTh1ZTAzODAzZXA3MTZrMG1vd2MifQ.b7r-Znl2mfjKgkeQDPF8tg"
         onViewportChange={viewport => {
+          console.log(viewport);
           setState({
             ...state,
             viewport: {

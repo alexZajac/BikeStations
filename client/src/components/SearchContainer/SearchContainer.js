@@ -10,7 +10,7 @@ import Trip from "../Trip";
 import {
   selectStyles,
   cityOptions,
-  refreshOptions,
+  realtimeOptions,
   getPollutionData
 } from "../../Constants";
 import bike_logo from "../../assets/bike_logo.png";
@@ -25,13 +25,14 @@ const SearchContainer = ({
   stations,
   focus,
   setFocus,
-  tripData, 
-  setTripData
+  tripData,
+  setTripData,
+  setRefreshData
 }) => {
   const [viewportWidth, setViewportWidth] = useState(
     document.documentElement.clientWidth
   );
-  const [selected, setSelected] = useState(2);
+  const [selected, setSelected] = useState(0);
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,7 +48,7 @@ const SearchContainer = ({
     </div>
   );
 
-  const getFilterWidth = () => (viewportWidth > 920 ? "15vw" : "30vw");
+  const getFilterWidth = () => (viewportWidth > 920 ? "10vw" : "25vw");
 
   const renderFilters = () => (
     <div className="filters-container">
@@ -68,18 +69,30 @@ const SearchContainer = ({
       </div>
       <div className="select-container">
         <Select
-          options={refreshOptions}
-          value={{ label: filters.refreshOption.label }}
+          options={realtimeOptions}
+          value={{ label: filters.realtimeOption.label }}
           placeholder="Refresh Interval..."
           isSearchable={false}
           styles={selectStyles(getFilterWidth())}
-          onChange={refreshOption =>
+          onChange={realtimeOption =>
             setFilters({
               ...filters,
-              refreshOption
+              realtimeOption
             })
           }
         />
+      </div>
+      <div className="select-container">
+        <div
+          onClick={() => setRefreshData(true)}
+          className={
+            filters.realtimeOption.value === "Realtime data"
+              ? "disabled"
+              : "refresh-button"
+          }
+        >
+          <p className="refresh-text">REFRESH</p>
+        </div>
       </div>
     </div>
   );
@@ -89,7 +102,11 @@ const SearchContainer = ({
     let resetButton = null;
     if (focus !== null) {
       resetButton = (
-        <div onClick={() => setFocus(null)} className="reset-button">
+        <div
+          onClick={() => setFocus(null)}
+          className="reset-button"
+          style={{ alignSelf: "center" }}
+        >
           <p className="reset-text">RESET</p>
         </div>
       );
@@ -100,12 +117,7 @@ const SearchContainer = ({
         {loading
           ? [null, null, null].map((_, i) => <SkeletonStation key={i} />)
           : renderStations.map((s, index) => (
-              <Station
-                key={s._id}
-                index={index}
-                setFocus={setFocus}
-                {...s}
-              />
+              <Station key={s._id} index={index} setFocus={setFocus} {...s} />
             ))}
         {resetButton}
       </div>
@@ -114,7 +126,7 @@ const SearchContainer = ({
 
   const renderWeatherData = () => {
     if (cityData === null) return cityData;
-    const { name, temperature, pollutionIndex } = cityData;
+    const { cityName: name, temperature, pollutionIndex } = cityData;
     const getTemperature = temp => {
       const tempValue = `${temp} °C`;
       if (temp < 10) return `${tempValue} ❄️`;
@@ -143,10 +155,15 @@ const SearchContainer = ({
     );
   };
 
+  const handleSelect = index => {
+    if (index !== 2) setTripData(null);
+    setSelected(index);
+  };
+
   const renderTabs = () => (
     <Tabs
       forceRenderTabPanel={true}
-      onSelect={i => setSelected(i)}
+      onSelect={i => handleSelect(i)}
       selectedIndex={selected}
       className="tabs"
     >
@@ -162,7 +179,7 @@ const SearchContainer = ({
       <TabPanel>{renderStations()}</TabPanel>
       <TabPanel>{renderWeatherData()}</TabPanel>
       <TabPanel style={{ width: "100%" }}>
-        <Trip tripData={tripData} setTripData={setTripData} />
+        <Trip tripData={tripData} setTripData={setTripData} filters={filters} />
       </TabPanel>
     </Tabs>
   );

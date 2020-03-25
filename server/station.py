@@ -212,10 +212,10 @@ def formatCityDataResponse(cities):
             results.append(cityDict)
     return results
 
-def getBikeStation(city,realTime):
+
+def getBikeStation(city, realTime):
     if realTime:
         stations = getData(city)
-        print(len(stations))
         for i, station in enumerate(stations):
             station['_id'] = i
             station['city'] = city
@@ -225,7 +225,8 @@ def getBikeStation(city,realTime):
         results = query(queryPayload)
         return formatBikeStationResponse(results)
 
-def getCityData(city,realTime):
+
+def getCityData(city, realTime):
     if realTime:
         cityData = getWeatherData(city)
         cityData[0]['cityName'] = city
@@ -238,8 +239,8 @@ def getCityData(city,realTime):
 
 def getStation(stationType, city, realTime):
     if stationType == 'bikes':
-        stations = getBikeStation(city,realTime)
-        cityData = getCityData(city,realTime)
+        stations = getBikeStation(city, realTime)
+        cityData = getCityData(city, realTime)
         return {
             "data": {
                 "city": cityData[0],

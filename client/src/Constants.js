@@ -1,6 +1,3 @@
-const BIKE_TYPE = "bikes";
-const TRAIN_TYPE = "trains";
-
 const cityOptions = [
   {
     label: "Paris",
@@ -52,36 +49,20 @@ const cityOptions = [
   }
 ];
 
-const refreshOptions = [
+const realtimeOptions = [
   {
-    label: "30 seconds",
-    value: "30 seconds"
+    label: "Realtime data",
+    value: "Realtime data"
   },
   {
-    label: "1 minute",
-    value: "1 minute"
-  },
-  {
-    label: "5 minutes",
-    value: "5 minutes"
-  },
-  {
-    label: "30 minutes",
-    value: "3 minutes"
-  },
-  {
-    label: "1 hour",
-    value: "1 hour"
-  },
-  {
-    label: "24 hours",
-    value: "24 hours"
+    label: "Static data",
+    value: "Static data"
   }
 ];
 
 const defaultOptions = {
   city: cityOptions[0],
-  refreshOption: refreshOptions[0]
+  realtimeOption: realtimeOptions[0]
 };
 
 const selectStyles = width => ({
@@ -165,7 +146,7 @@ const defaultMapState = {
     height: window.innerHeight,
     latitude: 48.8534,
     longitude: 2.3488,
-    zoom: 12
+    zoom: 11
   }
 };
 
@@ -203,7 +184,7 @@ export {
   selectStyles,
   defaultMapState,
   cityOptions,
-  refreshOptions,
+  realtimeOptions,
   coordinates,
   getPollutionData,
   MAP_TRANSITION_DURATION

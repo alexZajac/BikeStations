@@ -90,6 +90,7 @@
 .tab {
   flex: 1;
   border: none;
+  min-height: 100%;
   display: flex;
   text-align: center;
   align-items: center;
@@ -169,6 +170,39 @@
   font-style: italic;
 }
 
+.refresh-button {
+  width: 8vw;
+  height: 40px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00f7a8;
+  cursor: pointer;
+}
+
+.refresh-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  transition: all ease-in-out 0.2s;
+}
+
+.disabled {
+  width: 8vw;
+  height: 40px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ccc;
+  cursor: default;
+}
+
+.refresh-button:hover .refresh-text {
+  letter-spacing: 2px;
+}
+
 @media only screen and (max-width: 480px) {
   .logo {
     height: 6vh;
@@ -193,5 +227,16 @@
   }
   .city {
     font-size: 46px;
+  }
+  .refresh-button {
+    width: 20vw;
+    height: 40px;
+  }
+  .disabled {
+    width: 20vw;
+    height: 40px;
+  }
+  .refresh-text {
+    font-size: 14px;
   }
 }
