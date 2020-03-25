@@ -5,7 +5,7 @@ services:
     image: stain/jena-fuseki
     restart: always
     volumes:
-       - ./fuseki:/fuseki
+      - ./fuseki:/fuseki
     environment:
     - ADMIN_PASSWORD=admin
     - JVM_ARGS=-Xmx2g
