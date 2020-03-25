@@ -1,9 +1,40 @@
 version: '3'
 
 services:
-  fuseki:
+  db:
     image: stain/jena-fuseki
-    container_name: fuseki
+    restart: always
+    volumes:
+       - ./fuseki:/fuseki
+    environment:
+    - ADMIN_PASSWORD=admin
+    - JVM_ARGS=-Xmx2g
+    ports:
+     - "3030:3030"
+  api:
+    build:
+      context: ./server/
+    volumes:
+      - ./server:/usr/src/app
     restart: always
     ports:
-     - 3030:3030
+      - "5000:5000"
+    depends_on:
+      - db
+    links:
+      - db
+  client:
+    build:
+      context: ./client/
+    command: nginx -g "daemon off;"
+    restart: always
+    volumes:
+      - ./client:/app/src
+    depends_on:
+      - api
+    links:
+      - api       
+    expose:
+      - 80
+    ports:
+      - "80:80"

@@ -45,13 +45,14 @@ class Trip(Resource):
         parser.add_argument('realtime',  required=True,
                             help='end cannot be blank!')
         args = parser.parse_args()
+        print('true' == args['realtime'].lower())
         return getTrip(args['start'], args['end'], 'true' == args['realtime'].lower())
 
 
-api.add_resource(Station, '/v1/station')
-api.add_resource(AddData, '/v1/updateData')
-api.add_resource(Trip, '/v1/trip')
-api.add_resource(Home, '/')
+api.add_resource(Station, '/api/v1/station')
+api.add_resource(AddData, '/api/v1/updateData')
+api.add_resource(Trip, '/api/v1/trip')
+api.add_resource(Home, '/api/')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0")

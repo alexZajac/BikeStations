@@ -43,9 +43,9 @@ def getTrip(start, end, realTime):
 
     cityData = getCityData(city,realTime)
     stations = getBikeStation(city,realTime)
-
-    startStation = findNearestStation(
-        startCoordinates, stations, "availableBikes")
+    print(cityData)
+    print(stations)
+    startStation = findNearestStation(startCoordinates, stations, "availableBikes")
     endStation = findNearestStation(endCoordinates, stations, "freeSlot")
 
     return {
