@@ -24,12 +24,11 @@ const Trip = ({ tripData, setTripData, filters }) => {
 
   useEffect(() => {
     const fetchTrip = async () => {
-<<<<<<< HEAD
       const {
         realtimeOption: { value: realtime }
       } = filters;
       const isRealtime = realtime === "Realtime data";
-      const url = `/v1/trip?start=${encodeURI(from)}&end=${encodeURI(
+      const url = `api/v1/trip?start=${encodeURI(from)}&end=${encodeURI(
         to
       )}&realtime=${isRealtime}`;
       const response = await axios(url);
@@ -38,14 +37,6 @@ const Trip = ({ tripData, setTripData, filters }) => {
         data: { stations }
       } = respData;
       setTripData(stations);
-=======
-      const url = `api/v1/trip?start=${encodeURI(from)}&end=${encodeURI(to)}&realtime=True`;
-      const response = await axios(url);
-      // const {
-      //   data: { stations }
-      // } = response;
-      setTripData(response['data']['stations'])
->>>>>>> dockerv2
     };
     if (loading) fetchTrip();
   }, [loading]);
