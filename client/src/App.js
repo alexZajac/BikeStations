@@ -47,7 +47,7 @@ const App = () => {
   useEffect(() => {
     const refreshDataAsync = async () => {
       try {
-        const url = `/v1/updateData`;
+        const url = `/api/v1/updateData`;
         const _ = await axios(url);
         setRefreshData(false);
       } catch (e) {

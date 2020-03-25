@@ -28,7 +28,7 @@ const Trip = ({ tripData, setTripData, filters }) => {
         realtimeOption: { value: realtime }
       } = filters;
       const isRealtime = realtime === "Realtime data";
-      const url = `api/v1/trip?start=${encodeURI(from)}&end=${encodeURI(
+      const url = `/api/v1/trip?start=${encodeURI(from)}&end=${encodeURI(
         to
       )}&realtime=${isRealtime}`;
       const response = await axios(url);
