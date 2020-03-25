@@ -57,8 +57,7 @@ Its is composed in 2 parts:
 - A map on the right to show the results and explore.
 
 Interface screen :
-![Site Image](/images/site.jpg)
-
+![Site Image](https://github.com/alexZajac/BikeStations/blob/master/images/site.JPG?raw=true)
 
 
 ## How to install
