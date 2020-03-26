@@ -1,64 +1,25 @@
-const cityOptions = [
-  {
-    label: "Paris",
-    value: "Paris"
-  },
-  {
-    label: "Amiens",
-    value: "Amiens"
-  },
-  {
-    label: "Marseille",
-    value: "Marseille"
-  },
-  {
-    label: "Mulhouse",
-    value: "Mulhouse"
-  },
-  {
-    label: "Nancy",
-    value: "Nancy"
-  },
-  {
-    label: "Nantes",
-    value: "Nantes"
-  },
-  {
-    label: "Rouen",
-    value: "Rouen"
-  },
-  {
-    label: "Toulouse",
-    value: "Toulouse"
-  },
-  {
-    label: "Lyon",
-    value: "Lyon"
-  },
-  {
-    label: "Montpellier",
-    value: "Montpellier"
-  },
-  {
-    label: "Rennes",
-    value: "Rennes"
-  },
-  {
-    label: "Strasbourg",
-    value: "Strasbourg"
-  }
-];
+const generateSameObjects = labels =>
+  labels.map(label => ({ label, value: label }));
 
-const realtimeOptions = [
-  {
-    label: "Realtime data",
-    value: "Realtime data"
-  },
-  {
-    label: "Static data",
-    value: "Static data"
-  }
+const cityLabels = [
+  "Paris",
+  "Amiens",
+  "Marseille",
+  "Mulhouse",
+  "Nancy",
+  "Nantes",
+  "Rouen",
+  "Toulouse",
+  "Lyon",
+  "Montpellier",
+  "Rennes",
+  "Strasbourg"
 ];
+const realtimeLabels = ["Realtime data", "Static data"];
+
+const cityOptions = generateSameObjects(cityLabels);
+
+const realtimeOptions = generateSameObjects(realtimeLabels);
 
 const defaultOptions = {
   city: cityOptions[0],
@@ -88,6 +49,9 @@ const selectStyles = width => ({
   }),
   option: styles => ({ ...styles, fontFamily: "Open Sans", fontSize: "12px" })
 });
+
+const MAPBOX_TOKEN =
+  "pk.eyJ1IjoiYWxleHphamFjIiwiYSI6ImNrNnR2cTh1ZTAzODAzZXA3MTZrMG1vd2MifQ.b7r-Znl2mfjKgkeQDPF8tg";
 
 const coordinates = {
   Paris: {
@@ -178,6 +142,25 @@ const getPollutionData = value => {
 };
 
 const MAP_TRANSITION_DURATION = 3000;
+const REALTIME = realtimeOptions[0].value;
+
+const initialState = {
+  stations: [],
+  loading: true,
+  filters: defaultOptions,
+  focus: null,
+  cityData: null,
+  tripData: null,
+  refreshData: false
+};
+
+const resizeEffect = setViewportWidth => {
+  const handleResize = () => {
+    setViewportWidth(document.documentElement.clientWidth);
+  };
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+};
 
 export {
   defaultOptions,
@@ -187,5 +170,9 @@ export {
   realtimeOptions,
   coordinates,
   getPollutionData,
-  MAP_TRANSITION_DURATION
+  initialState,
+  resizeEffect,
+  MAP_TRANSITION_DURATION,
+  REALTIME,
+  MAPBOX_TOKEN
 };

@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import "./Trip.css";
 
 import axios from "axios";
-
 import { GoPrimitiveDot } from "react-icons/go";
+import { FaMapMarkerAlt, FaLocationArrow } from "react-icons/fa";
 
 import marker_begin from "../../assets/marker_begin.png";
 import marker_dest from "../../assets/marker_dest.png";
 
 import SearchInput from "../SearchInput";
 import { Station, SkeletonStation } from "../Station";
+import { REALTIME } from "../../Constants";
+import { isNull, hasNoLength, isEmpty } from "../../Utils";
 
-import { FaMapMarkerAlt, FaLocationArrow } from "react-icons/fa";
+const BASE_ICON_SIZE = 20;
+const SMALL_ICON_SIZE = 8;
 
 const Trip = ({ tripData, setTripData, filters }) => {
   const [from, setFrom] = useState("");
@@ -19,7 +22,7 @@ const Trip = ({ tripData, setTripData, filters }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (tripData !== null) setLoading(false);
+    if (!isNull(tripData)) setLoading(false);
   }, [tripData]);
 
   useEffect(() => {
@@ -27,17 +30,16 @@ const Trip = ({ tripData, setTripData, filters }) => {
       const {
         realtimeOption: { value: realtime }
       } = filters;
-      const isRealtime = realtime === "Realtime data";
+      const isRealtime = realtime === REALTIME;
       const url = `/api/v1/trip?start=${encodeURI(from)}&end=${encodeURI(
         to
       )}&realtime=${isRealtime}`;
       const response = await axios(url);
       const { data: respData } = response;
-      console.log(respData);
       const {
-        data: { stations }
+        data: { stations: tripData }
       } = respData;
-      setTripData(stations);
+      setTripData(tripData);
     };
     if (loading) fetchTrip();
   }, [loading]);
@@ -47,8 +49,8 @@ const Trip = ({ tripData, setTripData, filters }) => {
       <div className="content-wrapper">
         {loading
           ? [null, null].map((_, i) => <SkeletonStation key={i} />)
-          : tripData !== null &&
-            tripData.length > 0 && (
+          : !isNull(tripData) &&
+            !hasNoLength(tripData) && (
               <>
                 <Station
                   key={tripData[0]._id}
@@ -71,12 +73,12 @@ const Trip = ({ tripData, setTripData, filters }) => {
   const renderInputs = () => (
     <div className="row-inputs-trip">
       <div className="column">
-        <FaLocationArrow size={20} color="#00f7a8" />
-        <GoPrimitiveDot style={{ marginTop: "10px" }} size={8} />
-        <GoPrimitiveDot size={8} />
-        <GoPrimitiveDot size={8} />
+        <FaLocationArrow size={BASE_ICON_SIZE} color="#00f7a8" />
+        <GoPrimitiveDot style={{ marginTop: "10px" }} size={SMALL_ICON_SIZE} />
+        <GoPrimitiveDot size={SMALL_ICON_SIZE} />
+        <GoPrimitiveDot size={SMALL_ICON_SIZE} />
         <FaMapMarkerAlt
-          size={20}
+          size={BASE_ICON_SIZE}
           color="#f70044"
           style={{ marginTop: "10px" }}
         />
@@ -97,9 +99,7 @@ const Trip = ({ tripData, setTripData, filters }) => {
   );
 
   const handleClick = async () => {
-    if (from !== "" && to !== "") {
-      setLoading(true);
-    }
+    if (!isEmpty(from) && !isEmpty(to)) setLoading(true);
   };
 
   const renderStart = () => (
@@ -114,7 +114,10 @@ const Trip = ({ tripData, setTripData, filters }) => {
   );
 
   return (
-    <div className="content-wrapper" style={{ alignItems: "center" }}>
+    <div
+      className="content-wrapper"
+      style={{ alignItems: "center", overflowY: "auto" }}
+    >
       {renderInputs()}
       {renderStart()}
       {renderStations()}

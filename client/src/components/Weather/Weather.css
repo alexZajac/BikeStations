@@ -1,0 +1,59 @@
+.content-wrapper {
+  width: 100%;
+  min-height: 70vh;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5vh;
+}
+
+.city {
+  font-family: "Playfair Display";
+  font-weight: bold;
+  font-size: 60px;
+}
+
+.part-weather {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 6vh;
+}
+
+.title-part-weather {
+  font-family: "Lato";
+  font-weight: bold;
+  letter-spacing: 4px;
+  font-size: 18px;
+}
+
+.important-text-weather {
+  font-family: "Lato";
+  font-size: 26px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0 20px 0;
+}
+
+.pollution-color {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: solid 2px black;
+  padding: 10px;
+  margin-right: 20px;
+}
+
+.desc-pollution {
+  font-family: "Lato";
+  font-size: 18px;
+  font-style: italic;
+}

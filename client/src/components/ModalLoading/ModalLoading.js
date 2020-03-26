@@ -1,8 +1,9 @@
-import React from "react";
+import React, { memo } from "react";
 import "./ModalLoading.css";
 
 import Modal from "react-modal";
 import Lottie from "react-lottie";
+
 import animationData from "../../assets/loading_anim.json";
 
 const customStyles = {
@@ -33,21 +34,23 @@ const defaultOptions = {
   }
 };
 
-const ModalLoading = ({ refreshData }) => {
-  return (
-    <Modal isOpen={refreshData} style={customStyles}>
-      <div className="lottie-container">
-        <Lottie
-          options={defaultOptions}
-          height={400}
-          width={400}
-          isStopped={false}
-          isPaused={false}
-        />
-      </div>
-      <p className="modal-text">Let's find all these bike stations! 🚴‍♂️</p>
-    </Modal>
-  );
-};
+const DEFAULT_DIM = 400;
+
+const ModalLoading = memo(({ refreshData }) => (
+  <Modal isOpen={refreshData} style={customStyles}>
+    <div className="lottie-container">
+      <Lottie
+        options={defaultOptions}
+        height={DEFAULT_DIM}
+        width={DEFAULT_DIM}
+        isStopped={false}
+        isPaused={false}
+      />
+    </div>
+    <p className="modal-text">
+      Let's find all these bike stations! <span role="img">🚴‍♂️</span>
+    </p>
+  </Modal>
+));
 
 export default ModalLoading;

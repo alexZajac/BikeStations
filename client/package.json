@@ -17,7 +17,8 @@
     "react-modal": "^3.11.2",
     "react-scripts": "3.3.0",
     "react-select": "^3.0.8",
-    "react-tabs": "^3.1.0"
+    "react-tabs": "^3.1.0",
+    "react-virtualized": "^9.21.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -40,5 +41,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://api"
+  "proxy": "http://localhost:5000"
 }

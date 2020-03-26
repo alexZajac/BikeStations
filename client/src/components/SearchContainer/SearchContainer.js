@@ -1,196 +1,208 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import "./SearchContainer.css";
 
 import Select from "react-select";
 import { Tabs, Tab, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-
-import Trip from "../Trip";
+import { List } from "react-virtualized";
+import "react-virtualized/styles.css";
 
 import {
   selectStyles,
   cityOptions,
   realtimeOptions,
-  getPollutionData
+  resizeEffect,
+  REALTIME
 } from "../../Constants";
+
+import { isNull } from "../../Utils";
 import bike_logo from "../../assets/bike_logo.png";
-
 import { Station, SkeletonStation } from "../Station";
+import Trip from "../Trip";
+import Weather from "../Weather";
 
-const SearchContainer = ({
-  filters,
-  cityData,
-  setFilters,
-  loading,
-  stations,
-  focus,
-  setFocus,
-  tripData,
-  setTripData,
-  setRefreshData
-}) => {
-  const [viewportWidth, setViewportWidth] = useState(
-    document.documentElement.clientWidth
-  );
-  const [selected, setSelected] = useState(0);
+const FAKE_DATA = [null, null, null];
 
-  useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(document.documentElement.clientWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+const tabClass = (index, selected) =>
+  `tab ${selected === index ? "active-tab" : ""}`;
 
-  const renderLogo = () => (
-    <div className="logo-container">
-      <img alt="Bike stations" src={bike_logo} className="logo" />
-    </div>
-  );
+const SearchContainer = memo(
+  ({
+    filters,
+    cityData,
+    setFilters,
+    loading,
+    stations,
+    focus,
+    setFocus,
+    tripData,
+    setTripData,
+    setRefreshData
+  }) => {
+    const [viewportWidth, setViewportWidth] = useState(
+      document.documentElement.clientWidth
+    );
+    const [selected, setSelected] = useState(0);
 
-  const getFilterWidth = () => (viewportWidth > 920 ? "10vw" : "25vw");
+    useEffect(() => resizeEffect(setViewportWidth), []);
 
-  const renderFilters = () => (
-    <div className="filters-container">
-      <div className="select-container">
-        <Select
-          options={cityOptions}
-          value={{ label: filters.city.label }}
-          placeholder="City..."
-          isSearchable={false}
-          styles={selectStyles(getFilterWidth())}
-          onChange={city =>
-            setFilters({
-              ...filters,
-              city
-            })
-          }
-        />
+    const getFilterWidth = () => (viewportWidth > 920 ? "10vw" : "25vw");
+    const getListWidth = () =>
+      viewportWidth > 920 ? window.innerWidth * 0.37 : window.innerWidth * 0.95;
+    const getItemHeight = () =>
+      viewportWidth > 920 ? window.innerHeight * 0.25 : window.innerWidth * 0.3;
+
+    const getResetButton = () => (
+      <div
+        onClick={() => setFocus(null)}
+        className="reset-button"
+        style={{ alignSelf: "center" }}
+      >
+        <p className="reset-text">RESET</p>
       </div>
-      <div className="select-container">
-        <Select
-          options={realtimeOptions}
-          value={{ label: filters.realtimeOption.label }}
-          placeholder="Refresh Interval..."
-          isSearchable={false}
-          styles={selectStyles(getFilterWidth())}
-          onChange={realtimeOption =>
-            setFilters({
-              ...filters,
-              realtimeOption
-            })
-          }
-        />
-      </div>
-      <div className="select-container">
-        <div
-          onClick={() => setRefreshData(true)}
-          className={
-            filters.realtimeOption.value === "Realtime data"
-              ? "disabled"
-              : "refresh-button"
-          }
-        >
-          <p className="refresh-text">REFRESH</p>
-        </div>
-      </div>
-    </div>
-  );
+    );
 
-  const renderStations = () => {
-    let renderStations = stations;
-    let resetButton = null;
-    if (focus !== null) {
-      resetButton = (
-        <div
-          onClick={() => setFocus(null)}
-          className="reset-button"
-          style={{ alignSelf: "center" }}
-        >
-          <p className="reset-text">RESET</p>
+    const renderStations = () => {
+      let renderStations = stations;
+      let resetButton = null;
+      if (!isNull(focus)) {
+        resetButton = getResetButton();
+        renderStations = renderStations.filter(s => s._id === focus);
+        return (
+          <div className="content-wrapper">
+            <Station
+              key={renderStations[0]._id}
+              {...renderStations[0]}
+              setFocus={setFocus}
+            />
+            {resetButton}
+          </div>
+        );
+      }
+      const rowRenderer = ({ index, key, style }) => (
+        <div key={key} style={style}>
+          <Station key={renderStations[index]._id} {...renderStations[index]} />
         </div>
       );
-      renderStations = renderStations.filter(s => s._id === focus);
-    }
-    return (
-      <div className="content-wrapper">
-        {loading
-          ? [null, null, null].map((_, i) => <SkeletonStation key={i} />)
-          : renderStations.map((s, index) => (
-              <Station key={s._id} index={index} setFocus={setFocus} {...s} />
-            ))}
-        {resetButton}
-      </div>
-    );
-  };
-
-  const renderWeatherData = () => {
-    if (cityData === null) return cityData;
-    const { cityName: name, temperature, pollutionIndex } = cityData;
-    const getTemperature = temp => {
-      const tempValue = `${temp} °C`;
-      if (temp < 10) return `${tempValue} ❄️`;
-      else if (temp < 20) return `${tempValue} ⛅`;
-      return `${tempValue} ☀️`;
+      return (
+        <>
+          {loading ? (
+            FAKE_DATA.map((_, i) => <SkeletonStation key={i} />)
+          ) : (
+            <List
+              style={{
+                outline: "none"
+              }}
+              width={getListWidth()}
+              height={
+                renderStations.length === 1
+                  ? window.innerHeight * 0.6
+                  : window.innerHeight * 0.66
+              }
+              rowHeight={getItemHeight()}
+              rowCount={renderStations.length}
+              rowRenderer={rowRenderer}
+            />
+          )}
+        </>
+      );
     };
-    const [color, mainText, desc] = getPollutionData(pollutionIndex);
-    return (
-      <div className="content-wrapper">
-        <p className="city">{name}</p>
-        <div className="part-weather">
-          <p className="important-text-weather">
-            {getTemperature(temperature)}
-          </p>
+
+    const handleSelect = index => {
+      if (index !== 2) setTripData(null);
+      setSelected(index);
+    };
+
+    const renderFilters = () => (
+      <div className="filters-container">
+        <div className="select-container">
+          <Select
+            options={cityOptions}
+            value={{ label: filters.city.label }}
+            placeholder="City..."
+            isSearchable={false}
+            styles={selectStyles(getFilterWidth())}
+            onChange={city =>
+              setFilters({
+                ...filters,
+                city
+              })
+            }
+          />
         </div>
-        <div className="part-weather">
-          <div className="row">
-            <div className="pollution-color" style={{ backgroundColor: color }}>
-              <p className="important-text-weather">{pollutionIndex}</p>
-            </div>
-            <p className="important-text-weather">{mainText}</p>
+        <div className="select-container">
+          <Select
+            options={realtimeOptions}
+            value={{ label: filters.realtimeOption.label }}
+            placeholder="Refresh Interval..."
+            isSearchable={false}
+            styles={selectStyles(getFilterWidth())}
+            onChange={realtimeOption =>
+              setFilters({
+                ...filters,
+                realtimeOption
+              })
+            }
+          />
+        </div>
+        <div className="select-container">
+          <div
+            onClick={() => setRefreshData(true)}
+            className={
+              filters.realtimeOption.value === REALTIME
+                ? "disabled"
+                : "refresh-button"
+            }
+          >
+            <p className="refresh-text">REFRESH</p>
           </div>
-          <p className="desc-pollution">{desc}</p>
         </div>
       </div>
     );
-  };
 
-  const handleSelect = index => {
-    if (index !== 2) setTripData(null);
-    setSelected(index);
-  };
+    const renderLogo = () => (
+      <div className="logo-container">
+        <img alt="Bike stations" src={bike_logo} className="logo" />
+      </div>
+    );
 
-  const renderTabs = () => (
-    <Tabs
-      forceRenderTabPanel={true}
-      onSelect={i => handleSelect(i)}
-      selectedIndex={selected}
-      className="tabs"
-    >
-      <TabList className="tablist">
-        <Tab className={`tab ${selected === 0 ? "active-tab" : ""}`}>
-          STATIONS
-        </Tab>
-        <Tab className={`tab ${selected === 1 ? "active-tab" : ""}`}>
-          WEATHER
-        </Tab>
-        <Tab className={`tab ${selected === 2 ? "active-tab" : ""}`}>TRIP</Tab>
-      </TabList>
-      <TabPanel>{renderStations()}</TabPanel>
-      <TabPanel>{renderWeatherData()}</TabPanel>
-      <TabPanel style={{ width: "100%" }}>
-        <Trip tripData={tripData} setTripData={setTripData} filters={filters} />
-      </TabPanel>
-    </Tabs>
-  );
+    const renderTabs = () => (
+      <Tabs
+        forceRenderTabPanel={true}
+        onSelect={i => handleSelect(i)}
+        selectedIndex={selected}
+        className="tabs"
+      >
+        <TabList className="tablist">
+          <Tab className={tabClass(0, selected)}>STATIONS</Tab>
+          <Tab className={tabClass(1, selected)}>WEATHER</Tab>
+          <Tab className={tabClass(2, selected)}>TRIP</Tab>
+        </TabList>
+        <TabPanel style={{ width: "100%" }}>{renderStations()}</TabPanel>
+        <TabPanel style={{ width: "100%" }}>
+          <Weather cityData={cityData} />
+        </TabPanel>
+        <TabPanel style={{ width: "100%" }}>
+          <Trip
+            tripData={tripData}
+            filters={filters}
+            setTripData={setTripData}
+          />
+        </TabPanel>
+      </Tabs>
+    );
 
-  return (
-    <div className="search-container">
-      {renderLogo()}
-      {renderFilters()}
-      {renderTabs()}
-    </div>
-  );
-};
+    return (
+      <div
+        className="search-container"
+        style={{ overflowY: selected === 2 ? "auto" : "hidden" }}
+      >
+        {renderLogo()}
+        {renderFilters()}
+        {renderTabs()}
+      </div>
+    );
+  }
+);
 
 export default SearchContainer;

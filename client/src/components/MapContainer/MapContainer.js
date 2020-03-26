@@ -2,70 +2,49 @@ import React, { useState, useEffect } from "react";
 import "./MapContainer.css";
 import ReactMapGL, {
   Marker,
-  CanvasOverlay,
   WebMercatorViewport,
   FlyToInterpolator
 } from "react-map-gl";
+import { MdDirectionsBike } from "react-icons/md";
 
 import marker_begin from "../../assets/marker_begin.png";
 import marker_dest from "../../assets/marker_dest.png";
-import marker_bike from "../../assets/marker_bike.png";
 
+import PolylineOverlay from "./PolylineOverlay";
 import "./MapContainer.css";
 import {
   defaultMapState,
   coordinates,
-  MAP_TRANSITION_DURATION
+  resizeEffect,
+  MAP_TRANSITION_DURATION,
+  MAPBOX_TOKEN
 } from "../../Constants";
+import { hasNoLength, isNull } from "../../Utils";
 
-const PolylineOverlay = props => {
-  const _redraw = ({ width, height, ctx, isDragging, project }) => {
-    const {
-      points,
-      color = "black",
-      lineWidth = 4,
-      renderWhileDragging = true
-    } = props;
-    ctx.clearRect(0, 0, width, height);
-    ctx.globalCompositeOperation = "lighter";
-
-    if ((renderWhileDragging || !isDragging) && points) {
-      ctx.lineWidth = lineWidth;
-      ctx.strokeStyle = color;
-      ctx.beginPath();
-      points.forEach(point => {
-        const pixel = project([point[0], point[1]]);
-        ctx.lineTo(pixel[0], pixel[1]);
-      });
-      ctx.stroke();
-    }
-  };
-  return <CanvasOverlay redraw={_redraw} />;
-};
+const DEFAULT_ZOOM = 12;
+const DEFAULT_PADDING = 100;
+const OFFSET_LEFT = -50;
+const OFFSET_TOP = -75;
+const MAP_STYLE = "mapbox://styles/mapbox/outdoors-v11";
+const ICON_SIZE = 26;
+const ICON_COLOR = "#333";
 
 const MapContainer = ({ stations, setFocus, focus, tripData }) => {
-  const [state, setState] = useState(defaultMapState);
+  const [mapState, setMapState] = useState(defaultMapState);
   const [viewportWidth, setViewportWidth] = useState(
     document.documentElement.clientWidth
   );
+  useEffect(() => resizeEffect(setViewportWidth), []);
 
   useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(document.documentElement.clientWidth);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (stations.length > 0) {
+    if (!hasNoLength(stations)) {
       const { city } = stations[0];
       const { latitude, longitude } = coordinates[city];
-      setState({
-        ...state,
+      setMapState({
+        ...mapState,
         viewport: {
-          ...state.viewport,
-          zoom: 12,
+          ...mapState.viewport,
+          zoom: DEFAULT_ZOOM,
           latitude,
           longitude,
           transitionDuration: MAP_TRANSITION_DURATION,
@@ -76,17 +55,17 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
   }, [stations, coordinates]);
 
   useEffect(() => {
-    if (tripData !== null && tripData.length > 0) {
+    if (!isNull(tripData) && !hasNoLength(tripData)) {
       const points = getPointsFromTrip(tripData);
       const { longitude, latitude, zoom } = new WebMercatorViewport(
-        state.viewport
+        mapState.viewport
       ).fitBounds(points, {
-        padding: 100
+        padding: DEFAULT_PADDING
       });
-      setState({
-        ...state,
+      setMapState({
+        ...mapState,
         viewport: {
-          ...state.viewport,
+          ...mapState.viewport,
           zoom,
           latitude,
           longitude,
@@ -97,22 +76,16 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
     }
   }, [tripData]);
 
-  const getPointsFromTrip = tripData => {
-    if (tripData !== null && tripData.length > 0) {
-      return tripData.map(s => [s.longitude, s.latitude]);
-    }
-    return null;
-  };
-
-  const points = getPointsFromTrip(tripData);
+  const getPointsFromTrip = tripData =>
+    !isNull(tripData) && !hasNoLength(tripData)
+      ? tripData.map(s => [s.longitude, s.latitude])
+      : null;
 
   const renderStations = () => {
     let renderStations = stations;
-    if (focus !== null)
+    if (!isNull(focus))
       renderStations = renderStations.filter(s => s._id === focus);
-    if (tripData !== null) {
-      renderStations = [];
-    }
+    if (!isNull(tripData)) renderStations = [];
     return renderStations.map(s => {
       const { _id, latitude, longitude } = s;
       return (
@@ -120,59 +93,61 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
           key={_id}
           latitude={latitude}
           longitude={longitude}
-          offsetLeft={-50}
-          offsetTop={-75}
+          offsetLeft={OFFSET_LEFT}
+          offsetTop={OFFSET_TOP}
         >
-          <div className="container-user-marker">
-            <img
-              src={marker_bike}
-              className="marker-station"
-              alt="Marker station"
-              onClick={() => setFocus(_id)}
-            />
+          <div onClick={() => setFocus(_id)} className="container-user-marker">
+            <div className="custom-marker">
+              <MdDirectionsBike size={ICON_SIZE} color={ICON_COLOR} />
+            </div>
           </div>
         </Marker>
       );
     });
   };
 
-  const renderTripPath = () => (
-    <>
-      <PolylineOverlay points={points} />
-      <Marker
-        key={0}
-        longitude={points[0][0]}
-        latitude={points[0][1]}
-        offsetLeft={-50}
-        offsetTop={-75}
-      >
-        <div className="container-user-marker">
-          <img
-            src={marker_begin}
-            className="marker-station"
-            alt="Marker begin"
-            style={{ animation: "markerAnim 3s ease-in-out infinite" }}
-          />
-        </div>
-      </Marker>
-      <Marker
-        key={1}
-        longitude={points[1][0]}
-        latitude={points[1][1]}
-        offsetLeft={-50}
-        offsetTop={-75}
-      >
-        <div className="container-user-marker">
-          <img
-            src={marker_dest}
-            className="marker-station"
-            alt="Marker dest"
-            style={{ animation: "markerAnim 3s ease-in-out infinite 0.6s" }}
-          />
-        </div>
-      </Marker>
-    </>
-  );
+  const renderTripPath = () => {
+    const points = getPointsFromTrip(tripData);
+    return (
+      <>
+        <PolylineOverlay points={points} />
+        <Marker
+          key={0}
+          longitude={points[0][0]}
+          latitude={points[0][1]}
+          offsetLeft={OFFSET_LEFT}
+          offsetTop={OFFSET_TOP}
+        >
+          <div className="container-user-marker">
+            <img
+              src={marker_begin}
+              className="marker-station"
+              alt="Marker begin"
+            />
+          </div>
+        </Marker>
+        <Marker
+          key={1}
+          longitude={points[1][0]}
+          latitude={points[1][1]}
+          offsetLeft={OFFSET_LEFT}
+          offsetTop={OFFSET_TOP}
+        >
+          <div
+            className="container-user-marker"
+            style={{ backgroundColor: "transparent", border: "none" }}
+          >
+            <img
+              src={marker_dest}
+              className="marker-station"
+              alt="Marker dest"
+              style={{ animation: "markerAnim 3s ease-in-out infinite 0.6s" }}
+            />
+          </div>
+        </Marker>
+      </>
+    );
+  };
 
   const getMapWidth = () => (viewportWidth > 920 ? "60vw" : "100vw");
 
@@ -180,15 +155,15 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
     <div className="map-container">
       <ReactMapGL
         className="mapboxgl-map"
-        {...state.viewport}
-        mapStyle="mapbox://styles/mapbox/outdoors-v11"
+        {...mapState.viewport}
+        mapStyle={MAP_STYLE}
         width={getMapWidth()}
-        mapboxApiAccessToken="pk.eyJ1IjoiYWxleHphamFjIiwiYSI6ImNrNnR2cTh1ZTAzODAzZXA3MTZrMG1vd2MifQ.b7r-Znl2mfjKgkeQDPF8tg"
+        mapboxApiAccessToken={MAPBOX_TOKEN}
         onViewportChange={viewport => {
-          setState({
-            ...state,
+          setMapState({
+            ...mapState,
             viewport: {
-              ...state.viewport,
+              ...mapState.viewport,
               zoom: viewport.zoom,
               latitude: viewport.latitude,
               longitude: viewport.longitude,
@@ -198,7 +173,7 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
         }}
       >
         {renderStations()}
-        {tripData !== null && tripData.length > 0 && renderTripPath()}
+        {!isNull(tripData) && !hasNoLength(tripData) && renderTripPath()}
       </ReactMapGL>
     </div>
   );

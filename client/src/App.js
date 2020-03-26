@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { defaultOptions } from "./Constants";
+
+import { REALTIME, defaultOptions } from "./Constants";
 import "./App.css";
 import { MapContainer, SearchContainer, ModalLoading } from "./components";
 
@@ -19,7 +20,7 @@ const App = () => {
         city: { value },
         realtimeOption: { value: realtime }
       } = filters;
-      const isRealtime = realtime === "Realtime data";
+      const isRealtime = realtime === REALTIME;
       try {
         const url = `/api/v1/station?city=${value}&type=bikes&realtime=${isRealtime}`;
         const response = await axios(url);

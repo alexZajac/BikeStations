@@ -3,7 +3,7 @@ p {
 }
 
 .station-container {
-  width: 100%;
+  width: 90%;
   display: flex;
   margin-top: 40px;
   align-items: center;
@@ -12,6 +12,8 @@ p {
   border-radius: 20px;
   transition: all ease-in-out 0.2s;
   animation: slipIn 0.9s ease-in-out 100ms;
+  margin-left: 24px;
+  margin-bottom: 20px;
 }
 
 .station-container:hover {
