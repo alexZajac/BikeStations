@@ -1,27 +1,27 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
-from station import addDataInStore, getStation
-from trip import getTrip
+from app.station import addDataInStore, getStation
+from app.trip import getTrip
 
 app = Flask(__name__)
 api = Api(app)
 
-
+# Default endpoint
 class Home(Resource):
     def get(self):
         return {
             "ack": True
         }
 
-
-class AddData(Resource):
+# Update data in TripleStore
+class UpdateData(Resource):
     def get(self):
         addDataInStore()
         return {
             "updated": True
         }
 
-
+# Get stations data
 class Station(Resource):
     def get(self):
         parser = reqparse.RequestParser()
@@ -35,6 +35,7 @@ class Station(Resource):
         return getStation(args['type'], args['city'], 'true' == args['realtime'].lower())
 
 
+# Get trip data
 class Trip(Resource):
     def get(self):
         parser = reqparse.RequestParser()
@@ -45,12 +46,11 @@ class Trip(Resource):
         parser.add_argument('realtime',  required=True,
                             help='end cannot be blank!')
         args = parser.parse_args()
-        print('true' == args['realtime'].lower())
         return getTrip(args['start'], args['end'], 'true' == args['realtime'].lower())
 
 
 api.add_resource(Station, '/api/v1/station')
-api.add_resource(AddData, '/api/v1/updateData')
+api.add_resource(UpdateData, '/api/v1/updateData')
 api.add_resource(Trip, '/api/v1/trip')
 api.add_resource(Home, '/api/')
 

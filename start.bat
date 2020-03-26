@@ -6,5 +6,4 @@
 del "%~dp0fuseki\config.ttl"
 del "%~dp0fuseki\shiro.ini"
 
-start docker-compose up --build
-pause
+start docker-compose up

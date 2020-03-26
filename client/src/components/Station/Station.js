@@ -39,7 +39,7 @@ const Station = ({
         : availableBikes + " bikes available for rent"
     }`;
   const getLastUpdate = () =>
-    `${lastUpdate === null ? "Not available" : convertToTime(lastUpdate)}`;
+    `${lastUpdate === null ? "Not available" : convertToTime(lastUpdate*1000)}`;
 
   const convertToTime = timestamp => {
     const pad = n => (n < 10 ? `0${n}` : n);
