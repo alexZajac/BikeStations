@@ -18,7 +18,9 @@
         - Stations
         - Trips
         - etc
-   5. Frontend Client (React app) 
+   5. Real time data access
+   6. Geting trip
+   7. Frontend Client (React app) 
 
 ## Project requirements
 
@@ -63,14 +65,19 @@ Interface screen :
 ## How to install
 
 You can test this project in local with **Docker** using the following steps :
+
 1. First clone this repository
 ```
 git clone https://github.com/alexZajac/BikeStations.git
 ```
+
 2. Then **in the project folder** run the docker compose command
 ```
 docker-compose up
 ```
+
+**If you have any issue with fuseki** when you run docker compose, execute the `start.bat` or `start.sh` file depending on your os
+
 The project will then be available on http://localhost url.
 
 ## Used Technologies
@@ -84,15 +91,14 @@ We choose to use it as a standalone server in order to just query the server wit
 #### Description
 Flask is a lightweight WSGI web application framework. It is designed to make getting started quick and easy, with the ability to scale up to complex applications. It began as a simple wrapper around Werkzeug and Jinja and has become one of the most popular Python web application frameworks.
 #### How we use it
-We use Flask to create a server running a complete API. All the features of our final project is handled by this API that we can query from the frontend client.
+We use Flask to create a server running as an REST API. All the features of our final project is handled by this API that we can query from the frontend client. It fetch the differents API and normalize them . The result is stored in the TripleStore or just send back to the frontend client directly.
 
 ### 3. React as Frontend client
 #### Description
 React is a JavaScript library for building user interfaces. It is maintained by Facebook and a community of individual developers and companies.
 React can be used as a base in the development of single-page or mobile applications.React is only concerned with rendering data to the DOM.
 #### How we use it
-We use React for all the Frontend.
-React only handles the user interface, interprets what the user want to do, calls our Python API for handling the uer demands, and displays the API response on the interface.
+We use React for all the frontend part. React only handles the user interface, interprets what the user want to do and calls our Python API.
 
 ## Application architecture
 ### 1. Data extraction
@@ -100,19 +106,25 @@ The data exctration is Handled by our Python API.
 
 Since the data are spread in different data sources with different syntaxes, we fetch multiples urls for each city.
 
-When the data is collected, still remains the normalization proccess. Some data are in JSON, others in XML. Also the properties names, global structures, or detailed data, are not the same for every sources.
+When the data is collected, it still remains the normalization proccess. Some data are in JSON, others in XML. Also the properties names, global structures, or detailed data are not the same for every sources.
 
 ### 2. Data normalisation (JSON Mapping) 
-In order to normalize all the data, in a first time we convert the XML data into JSON data.
+In order to normalize all the data, in a first time, we convert the XML data into JSON data.
 
 At this point we only have JSON data, but not with the same structure.
 
 **We choose not to use a mapping using JSON-LD**
 
-In order to process the mapping, we created a ```mapping.json``` file.
+In order to process the mapping, we created our own mapping called ```bikes_api.json```.
 For each different JSON structure we have from the different data sources, we map it to our normalized reference structure.
 
 Exemple for data for Lyon :
+- We define the *datatype* as *json* to know how to process data.
+- *pathToArray* define the path to the array of station.
+- *pathToData* define the path inside the station object to extract our data.
+- Inside *params* we define all the data to extract and normalize. The value of those params refers to the path and the key to the right value. We can set a semicolomn to acces an array or object. For example we can write `coordinates;lng` to access the lng property of coordinates.
+
+
 ```json
   {
     "city": "Lyon",
@@ -137,7 +149,7 @@ Exemple for data for Lyon :
 
 Applying this to all our JSON strutures gives us all the data normalized in a homogeneous structure.
 
-We don't use here JSON-LD mapping, but our own mapping in JSON. We chose to do it this way to facilitate the realtime data implementation.
+We don't use here JSON-LD mapping, but our own mapping in JSON. We chose to do it this way to facilitate the realtime data implementation. We think that converting JSON to JSON-LD to JSON to send it back to the front is not efficient.
 
 ### 3. TripleStore
 #### Ontology
@@ -147,7 +159,7 @@ It defines a vocabulary, types and properties we can use to query our feed and q
 
 In order to use the ontology we exptorted it to an ```.owl``` file we can import.
 
-#### Realtime store feeding
+#### Static store feeding
 
 Based on the ontology and our normalized data, we create all the triplets that can define a station.
 
@@ -158,6 +170,9 @@ For realtime data in the triplestore, we just repeat these 3 steps in a loop-bas
 2. Data JSON normalization
 3. JSON data conversion to RDF for adding it in the store
 
+The user can update this database at any time by pressing a button in the frontend
+
+
 ### 4. Querying the store (SPARQL)
 
 Having a triplestore using realtime data and our own vocubulary based on our ontology, we can query any data we want gathering avery sources just by querying our triplet store in SPARQL.
@@ -166,7 +181,7 @@ The Python API receive request with json body containing the city the user speci
 
 From the city we can build our SPARQL query to send to our triplestore :
 
-```
+``` SPARQL
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX ns: <http://www.owl-ontologies.com/unnamed.owl#> 
 
@@ -208,15 +223,25 @@ API response format:
                 "freeSlot": 3,
                 "availableBikes": 17,
                 "lastUpdate": "2020-03-20 10:30:00"
-            },
-            ...
+            }
         ]
     }
 }
 ```
 
+### 5. Real time data access
 
-### 5. FrontendClient
+To get real time data to the front end, we simply execute the following steps:
+1. Data extraction
+2. Data JSON normalization
+3. Send back data to the frontend
+
+### 6. Geting trip
+
+To get trip between two location, we only need the starting and ending address. We convert those starting and ending address with the geocoding api from google maps. Then we find the nearest city from the starting location an we query station data from that city. From all theses stations we find and return the nearest available bike station from the differents locations.
+
+
+### 7. FrontendClient
 
 Our front end client in React is simply the User Interface.
 
