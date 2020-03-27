@@ -4,6 +4,7 @@ import re
 from datetime import datetime
 import json
 import requests
+import time
 
 OWL_URL = "http://www.owl-ontologies.com/unnamed.owl#"
 MAX_WORKERS = 8
@@ -49,12 +50,11 @@ def addStations():
     # Get triplet for each data
     for index, station in enumerate(normalizedData):
         getStationsTriplets(index, station, tripletList)
-
-        if index%4 == 0:
-            # Format and insert the query
-            insertPayload = formatInsert(tripletList)
-            insert(insertPayload)
-            tripletList = []
+        
+        # Format and insert the query
+        insertPayload = formatInsert(tripletList)
+        insert(insertPayload)
+        tripletList = []
 
     print("Stations imported.")
 
