@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
-from app.station import addDataInStore, getStation
-from app.trip import getTrip
+from src.station import addDataInStore, getStation
+from src.trip import getTrip
 
 app = Flask(__name__)
 api = Api(app)
@@ -60,4 +60,5 @@ api.add_resource(UpdateData, '/api/v1/updateData')
 api.add_resource(Trip, '/api/v1/trip')
 api.add_resource(Home, '/api/')
 
-app.run(host="0.0.0.0")
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")
