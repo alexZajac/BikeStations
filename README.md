@@ -6,14 +6,14 @@ _(Web Semantics final project)_
 
 ## Table of content
 
-- 🎯 [Project Description and Requirements](#%F0%9F%8E%AF-project-description-and-requirements)
-- 👀 [Project Demo](#%F0%9F%91%80-project-demo)
-- 📝 [Installation Guide](#%F0%9F%93%9D-installation-guide)
-- 👨‍💻 [Used Technologies](#%F0%9F%91%A8%E2%80%8D%F0%9F%92%BB-used-technologies)
+- 🎯 [Project Description and Requirements](#-project-requirements)
+- 👀 [Project Demo](#-demo---how-to-use)
+- 📝 [Installation Guide](#-how-to-install)
+- 👨‍💻 [Used Technologies](#-used-technologies)
   1. Fuseki as TripleStore
   2. Flask with Python as backend API
   3. React as Frontend client
-- ⚙️ [Application architecture](#%E2%9A%99%EF%B8%8F-application-architecture)
+- ⚙️ [Application architecture](#%EF%B8%8F-application-architecture)
   1.  Data extraction
   2.  Data normalisation (JSON Mapping)
   3.  Triplestore
