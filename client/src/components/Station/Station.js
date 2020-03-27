@@ -20,32 +20,30 @@ const Station = ({
   lastUpdate,
   customImage
 }) => {
-  const getLocation = () =>
-    `${
-      isNull(address) ? "" : <span property="ns:address">{address}</span> + ","
-    } ${(<span property="ns:cityName">{city}</span>)}`;
-  const getSlots = () =>
-    `${(<span property="ns:freeSlots">{freeSlot}</span>)} slots remaining on ${(
+  const getLocation = () => (
+    <span property="ns:address">
+      {isNull(address) ? "" : address + ", "}
+      <span property="ns:cityName">{city}</span>
+    </span>
+  );
+  const getSlots = () => (
+    <span property="ns:freeSlots">
+      {freeSlot} slots remaining on
       <span property="ns:capacity">{capacity}</span>
-    )}`;
-  const getAvailabilities = () =>
-    `${
-      isNull(availableBikes) ? (
-        "No data on availability"
-      ) : (
-        <span property="ns:availableBikes">
-          {availableBikes} bikes available for rent
-        </span>
-      )
-    }`;
-  const getLastUpdate = () =>
-    `${
-      isNull(lastUpdate) ? (
-        "Not available"
-      ) : (
-        <span property="ns:lastUpdate">{convertToTime(lastUpdate * 1000)}</span>
-      )
-    }`;
+    </span>
+  );
+  const getAvailabilities = () => (
+    <span property="ns:availableBikes">
+      {isNull(availableBikes)
+        ? "No data on availability"
+        : { availableBikes } + " bikes available for rent"}
+    </span>
+  );
+  const getLastUpdate = () => (
+    <span property="ns:lastUpdate">
+      {isNull(lastUpdate) ? "Not available" : convertToTime(lastUpdate * 1000)}
+    </span>
+  );
 
   const convertToTime = timestamp => {
     const pad = n => (n < 10 ? `0${n}` : n);
