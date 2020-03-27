@@ -36,7 +36,7 @@ const Station = ({
     <span property="ns:availableBikes">
       {isNull(availableBikes)
         ? "No data on availability"
-        : { availableBikes } + " bikes available for rent"}
+        : availableBikes + " bikes available for rent"}
     </span>
   );
   const getLastUpdate = () => (
