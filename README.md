@@ -6,14 +6,14 @@ _(Web Semantics final project)_
 
 ## Table of content
 
-- 🎯 [Project Description and Requirements](#project-description-and-requirements)
-- 👀 [Project Demo](#project-demo)
-- 📝 [Installation Guide](#installation-guide)
-- 👨‍💻 [Used Technologies](#used-technologies)
+- 🎯 [Project Description and Requirements](#%F0%9F%8E%AF-project-description-and-requirements)
+- 👀 [Project Demo](#%F0%9F%91%80-project-demo)
+- 📝 [Installation Guide](#%F0%9F%93%9D-installation-guide)
+- 👨‍💻 [Used Technologies](#%F0%9F%91%A8%E2%80%8D%F0%9F%92%BB-used-technologies)
   1. Fuseki as TripleStore
   2. Flask with Python as backend API
   3. React as Frontend client
-- ⚙️ [Application architecture](#application-architecture)
+- ⚙️ [Application architecture](#%E2%9A%99%EF%B8%8F-application-architecture)
   1.  Data extraction
   2.  Data normalisation (JSON Mapping)
   3.  Triplestore
@@ -66,11 +66,11 @@ Its is composed in 2 parts:
 - The menu on the left to interact with the different features
 - A map on the right to show the results and explore.
 
-Animated Demo: 
+Animated Demo:
 
 ![](./images/demo.gif)
 
-RDFa examples for the town of Paris: 
+RDFa examples for the town of Paris:
 
 _(All the prefixes are defined in the html tag)_
 
@@ -85,7 +85,6 @@ Here we remove the _icons tags_ so that you can see all the interesting annotati
 Here is the **weather data**, RDF-annotated:
 
 ![](./images/rdfa_3.png)
-
 
 ## 📝 How to install
 
