@@ -4,6 +4,8 @@ A tool to visualize all the realtime availabilities of the bike stations of Fran
 
 _(Web Semantics final project)_
 
+Made with ❤️ by [Marc-Etienne DARTUS](https://github.com/MarcEtienneDartus), [Nicolas CAILLIEUX](https://github.com/Exorth98) and myself.
+
 ## Table of content
 
 - 🎯 [Project Description and Requirements](#-project-requirements)
