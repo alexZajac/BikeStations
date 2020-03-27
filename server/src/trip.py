@@ -1,6 +1,6 @@
 from geopy.distance import geodesic
-from app.mapsApi import getCoordinates
-from app.station import getBikeStation, getCityData
+from src.mapsApi import getCoordinates
+from src.station import getBikeStation, getCityData
 import json
 
 #Find city from start coordinates
