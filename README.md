@@ -6,14 +6,14 @@ _(Web Semantics final project)_
 
 ## Table of content
 
-- 🎯 Project Description and Requirements
-- 👀 Project Demo
-- 📝 Installation Guide
-- 👨‍💻 Used Technologies
+- 🎯 [Project Description and Requirements](#project-description-and-requirements)
+- 👀 [Project Demo](#project-demo)
+- 📝 [Installation Guide](#installation-guide)
+- 👨‍💻 [Used Technologies](#used-technologies)
   1. Fuseki as TripleStore
   2. Flask with Python as backend API
   3. React as Frontend client
-- ⚙️ Application architecture
+- ⚙️ [Application architecture](#application-architecture)
   1.  Data extraction
   2.  Data normalisation (JSON Mapping)
   3.  Triplestore
@@ -66,8 +66,25 @@ Its is composed in 2 parts:
 - The menu on the left to interact with the different features
 - A map on the right to show the results and explore.
 
-Interface screen :
-![Site Image](https://github.com/alexZajac/BikeStations/blob/master/images/site.JPG?raw=true)
+Animated Demo: 
+![](./images/demo.gif)
+
+RDFa examples for the town of Paris: 
+
+_(All the prefixes are defined in the html tag)_
+
+The **list of stations** on the left, **the weather** and **air quality data** are _RDF-annotated_ as they are all part of our ontology:
+
+![](./images/rdfa_1.png)
+
+Here we remove the _icons tags_ so that you can see all the interesting annotations:
+
+![](./images/rdfa_2.png)
+
+Here is the **weather data**, RDF-annotated:
+
+![](./images/rdfa_3.png)
+
 
 ## 📝 How to install
 
