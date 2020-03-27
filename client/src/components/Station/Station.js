@@ -20,17 +20,31 @@ const Station = ({
   lastUpdate,
   customImage
 }) => {
-  const getLocation = () => `${isNull(address) ? "" : address + ","} ${city}`;
-  const getSlots = () => `${freeSlot} slots remaining on ${capacity}`;
+  const getLocation = () =>
+    `${
+      isNull(address) ? "" : <span property="ns:address">{address}</span> + ","
+    } ${(<span property="ns:cityName">{city}</span>)}`;
+  const getSlots = () =>
+    `${(<span property="ns:freeSlots">{freeSlot}</span>)} slots remaining on ${(
+      <span property="ns:capacity">{capacity}</span>
+    )}`;
   const getAvailabilities = () =>
     `${
-      isNull(availableBikes)
-        ? "No data on availability"
-        : availableBikes + " bikes available for rent"
+      isNull(availableBikes) ? (
+        "No data on availability"
+      ) : (
+        <span property="ns:availableBikes">
+          {availableBikes} bikes available for rent
+        </span>
+      )
     }`;
   const getLastUpdate = () =>
     `${
-      isNull(lastUpdate) ? "Not available" : convertToTime(lastUpdate * 1000)
+      isNull(lastUpdate) ? (
+        "Not available"
+      ) : (
+        <span property="ns:lastUpdate">{convertToTime(lastUpdate * 1000)}</span>
+      )
     }`;
 
   const convertToTime = timestamp => {
@@ -53,7 +67,9 @@ const Station = ({
         <p property="ns:name" className="primary-info">
           {isNull(name) ? "" : name}
         </p>
-        <p className="secondary-info">{getLocation()}</p>
+        <p typeof="ns:Location" className="secondary-info">
+          {getLocation()}
+        </p>
       </div>
       <div className="icons-infos">
         <div className="row-infos">
@@ -87,6 +103,7 @@ const Station = ({
   const renderPicture = () => (
     <div className="picture-container">
       <img
+        property="foaf:img"
         src={!isUndefined(customImage) ? customImage : station_img}
         alt="station"
         className="station-picture"

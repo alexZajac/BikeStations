@@ -21,7 +21,7 @@ import { Station, SkeletonStation } from "../Station";
 import Trip from "../Trip";
 import Weather from "../Weather";
 
-const FAKE_DATA = [null, null, null];
+const PLACEHOLDERS = [null, null, null];
 
 const tabClass = (index, selected) =>
   `tab ${selected === index ? "active-tab" : ""}`;
@@ -87,7 +87,7 @@ const SearchContainer = memo(
       return (
         <>
           {loading ? (
-            FAKE_DATA.map((_, i) => <SkeletonStation key={i} />)
+            PLACEHOLDERS.map((_, i) => <SkeletonStation key={i} />)
           ) : (
             <List
               style={{
@@ -161,8 +161,13 @@ const SearchContainer = memo(
     );
 
     const renderLogo = () => (
-      <div className="logo-container">
-        <img alt="Bike stations" src={bike_logo} className="logo" />
+      <div property="foaf:logo" className="logo-container">
+        <img
+          property="foaf:img"
+          alt="Bike stations"
+          src={bike_logo}
+          className="logo"
+        />
       </div>
     );
 

@@ -16,19 +16,27 @@ const Weather = memo(({ cityData }) => {
   };
   const [color, mainText, desc] = getPollutionData(pollutionIndex);
   return (
-    <div className="content-wrapper">
-      <p className="city">{name}</p>
+    <div typeof="ns:City" className="content-wrapper">
+      <p property="ns:cityName" className="city">
+        {name}
+      </p>
       <div className="part-weather">
-        <p className="important-text-weather">{getTemperature(temperature)}</p>
+        <p property="ns:temperature" className="important-text-weather">
+          {getTemperature(temperature)}
+        </p>
       </div>
       <div className="part-weather">
         <div className="row">
           <div className="pollution-color" style={{ backgroundColor: color }}>
-            <p className="important-text-weather">{pollutionIndex}</p>
+            <p property="ns:pollutionIndex" className="important-text-weather">
+              {pollutionIndex}
+            </p>
           </div>
           <p className="important-text-weather">{mainText}</p>
         </div>
-        <p className="desc-pollution">{desc}</p>
+        <p property="rdfs:comment" className="desc-pollution">
+          {desc}
+        </p>
       </div>
     </div>
   );

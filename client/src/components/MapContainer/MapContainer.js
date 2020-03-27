@@ -120,6 +120,7 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
         >
           <div className="container-user-marker">
             <img
+              property="foaf:img"
               src={marker_begin}
               className="marker-station"
               alt="Marker begin"
@@ -138,6 +139,7 @@ const MapContainer = ({ stations, setFocus, focus, tripData }) => {
             style={{ backgroundColor: "transparent", border: "none" }}
           >
             <img
+              property="foaf:img"
               src={marker_dest}
               className="marker-station"
               alt="Marker dest"
