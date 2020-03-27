@@ -32,11 +32,9 @@ const Trip = ({ tripData, setTripData, filters }) => {
       } = filters;
       let isRealtime = realtime === REALTIME;
       if (IS_DEMO) isRealtime = true;
-      const baseUrl = `${API_URL}/api/v1/trip?start=${encodeURI(
+      const url = `${API_URL}/api/v1/trip?start=${encodeURI(
         from
       )}&end=${encodeURI(to)}&realtime=${isRealtime}`;
-      let url = baseUrl;
-      if (IS_DEMO) url = API_URL + baseUrl;
       const response = await axios(url);
       const { data: respData } = response;
       const {

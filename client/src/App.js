@@ -29,9 +29,7 @@ const App = () => {
       let isRealtime = realtime === REALTIME;
       if (IS_DEMO) isRealtime = true;
       try {
-        const baseUrl = `${API_URL}/api/v1/station?city=${value}&type=bikes&realtime=${isRealtime}`;
-        let url = baseUrl;
-        if (IS_DEMO) url = API_URL + baseUrl;
+        const url = `${API_URL}/api/v1/station?city=${value}&type=bikes&realtime=${isRealtime}`;
         const response = await axios(url);
         const { data: respData } = response;
         const { data } = respData;
