@@ -7,6 +7,8 @@ app = Flask(__name__)
 api = Api(app)
 
 # Default endpoint
+
+
 class Home(Resource):
     def get(self):
         return {
@@ -14,6 +16,8 @@ class Home(Resource):
         }
 
 # Update data in TripleStore
+
+
 class UpdateData(Resource):
     def get(self):
         addDataInStore()
@@ -22,6 +26,8 @@ class UpdateData(Resource):
         }
 
 # Get stations data
+
+
 class Station(Resource):
     def get(self):
         parser = reqparse.RequestParser()
@@ -54,5 +60,4 @@ api.add_resource(UpdateData, '/api/v1/updateData')
 api.add_resource(Trip, '/api/v1/trip')
 api.add_resource(Home, '/api/')
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+app.run(host="0.0.0.0")
