@@ -67,6 +67,7 @@ Its is composed in 2 parts:
 - A map on the right to show the results and explore.
 
 Animated Demo: 
+
 ![](./images/demo.gif)
 
 RDFa examples for the town of Paris: 
