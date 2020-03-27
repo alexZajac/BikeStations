@@ -1,3 +1,7 @@
+const { REACT_APP_IS_DEMO, REACT_APP_API_URL } = process.env;
+const IS_DEMO = REACT_APP_IS_DEMO ? true : false;
+const API_URL = REACT_APP_API_URL ? REACT_APP_API_URL : "";
+
 const generateSameObjects = labels =>
   labels.map(label => ({ label, value: label }));
 
@@ -162,6 +166,12 @@ const resizeEffect = setViewportWidth => {
   return () => window.removeEventListener("resize", handleResize);
 };
 
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 export {
   defaultOptions,
   selectStyles,
@@ -170,9 +180,12 @@ export {
   realtimeOptions,
   coordinates,
   getPollutionData,
+  getRandomInt,
   initialState,
   resizeEffect,
   MAP_TRANSITION_DURATION,
   REALTIME,
-  MAPBOX_TOKEN
+  MAPBOX_TOKEN,
+  IS_DEMO,
+  API_URL
 };

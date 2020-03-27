@@ -10,7 +10,7 @@ import marker_dest from "../../assets/marker_dest.png";
 
 import SearchInput from "../SearchInput";
 import { Station, SkeletonStation } from "../Station";
-import { REALTIME } from "../../Constants";
+import { REALTIME, IS_DEMO, API_URL } from "../../Constants";
 import { isNull, hasNoLength, isEmpty } from "../../Utils";
 
 const BASE_ICON_SIZE = 20;
@@ -30,10 +30,13 @@ const Trip = ({ tripData, setTripData, filters }) => {
       const {
         realtimeOption: { value: realtime }
       } = filters;
-      const isRealtime = realtime === REALTIME;
-      const url = `/api/v1/trip?start=${encodeURI(from)}&end=${encodeURI(
-        to
-      )}&realtime=${isRealtime}`;
+      let isRealtime = realtime === REALTIME;
+      if (IS_DEMO) isRealtime = true;
+      const baseUrl = `${API_URL}/api/v1/trip?start=${encodeURI(
+        from
+      )}&end=${encodeURI(to)}&realtime=${isRealtime}`;
+      let url = baseUrl;
+      if (IS_DEMO) url = API_URL + baseUrl;
       const response = await axios(url);
       const { data: respData } = response;
       const {

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { REALTIME, defaultOptions } from "./Constants";
+import {
+  IS_DEMO,
+  REALTIME,
+  API_URL,
+  defaultOptions,
+  getRandomInt
+} from "./Constants";
 import "./App.css";
 import { MapContainer, SearchContainer, ModalLoading } from "./components";
 
@@ -20,9 +26,12 @@ const App = () => {
         city: { value },
         realtimeOption: { value: realtime }
       } = filters;
-      const isRealtime = realtime === REALTIME;
+      let isRealtime = realtime === REALTIME;
+      if (IS_DEMO) isRealtime = true;
       try {
-        const url = `/api/v1/station?city=${value}&type=bikes&realtime=${isRealtime}`;
+        const baseUrl = `${API_URL}/api/v1/station?city=${value}&type=bikes&realtime=${isRealtime}`;
+        let url = baseUrl;
+        if (IS_DEMO) url = API_URL + baseUrl;
         const response = await axios(url);
         const { data: respData } = response;
         const { data } = respData;
@@ -55,7 +64,11 @@ const App = () => {
         alert(e);
       }
     };
-    if (refreshData) refreshDataAsync();
+    if (refreshData) {
+      if (IS_DEMO)
+        setTimeout(() => setRefreshData(false), getRandomInt(3000, 5000));
+      else refreshDataAsync();
+    }
   }, [refreshData]);
 
   return (
