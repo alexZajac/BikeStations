@@ -1,6 +1,6 @@
 import requests
 
-MAPS_API_KEY = 'AIzaSyBRN9n-q-vcOp6f0mVttTDix4dnRh4_BXs'
+MAPS_API_KEY = 'SET_API_KEY'
 
 # Convert string to location
 def getCoordinates(location):
