@@ -29,7 +29,7 @@ const Station = ({
   const getSlots = () => (
     <span property="ns:freeSlots">
       {freeSlot} slots remaining on
-      <span property="ns:capacity">{capacity}</span>
+      <span property="ns:capacity"> {capacity}</span>
     </span>
   );
   const getAvailabilities = () => (
