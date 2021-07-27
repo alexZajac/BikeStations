@@ -1,5 +1,7 @@
 # 🚴🏻 **BikeStations**
 
+<!---https://github.com/alexZajac/BikeStations/raw/master/images/demo.gif-->
+
 A tool to visualize all the realtime availabilities of the bike stations of France, with weather and air quality data, and trip-planning.
 
 _(Web Semantics final project)_
