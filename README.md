@@ -8,6 +8,8 @@ _(Web Semantics final project)_
 
 Made with ❤️ by [Marc-Etienne DARTUS](https://github.com/medartus), [Nicolas CAILLIEUX](https://github.com/Exorth98) and [myself](https://github.com/alexZajac).
 
+![demo](./images/demo.gif)
+
 ## Table of content
 
 - 🎯 [Project Description and Requirements](#-project-requirements)
