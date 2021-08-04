@@ -1,6 +1,6 @@
 # 🚴🏻 **BikeStations**
 
-<!---https://raw.githubusercontent.com/alexZajac/BikeStations/master/images/demo.gif-->
+<!---https://user-images.githubusercontent.com/38042033/128255063-8952d225-cc43-4acf-8e00-c5061ca773ae.gif-->
 
 A tool to visualize all the realtime availabilities of the bike stations of France, with weather and air quality data, and trip-planning.
 
