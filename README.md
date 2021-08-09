@@ -1,10 +1,16 @@
 # 🚴🏻 **BikeStations**
 
+<!---https://user-images.githubusercontent.com/38042033/128255063-8952d225-cc43-4acf-8e00-c5061ca773ae.gif-->
+
 A tool to visualize all the realtime availabilities of the bike stations of France, with weather and air quality data, and trip-planning.
 
 _Note: The trip planning functionality is only available in the development environment for rate-limiting reasons with the Google Maps API._ 
 
 _(Web Semantics final project)_
+
+Made with ❤️ by [Marc-Etienne DARTUS](https://github.com/medartus), [Nicolas CAILLIEUX](https://github.com/Exorth98) and [myself](https://github.com/alexZajac).
+
+![demo](./images/demo.gif)
 
 ## Table of content
 
