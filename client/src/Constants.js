@@ -1,5 +1,5 @@
 const { REACT_APP_IS_DEMO, REACT_APP_API_URL } = process.env;
-const IS_DEMO = REACT_APP_IS_DEMO ? true : false;
+const IS_DEMO = REACT_APP_IS_DEMO;
 const API_URL = REACT_APP_API_URL ? REACT_APP_API_URL : "";
 
 const generateSameObjects = labels =>

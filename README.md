@@ -2,6 +2,8 @@
 
 A tool to visualize all the realtime availabilities of the bike stations of France, with weather and air quality data, and trip-planning.
 
+_Note: The trip planning functionality is only available in the development environment for rate-limiting reasons with the Google Maps API._ 
+
 _(Web Semantics final project)_
 
 ## Table of content

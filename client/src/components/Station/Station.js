@@ -10,7 +10,6 @@ const ICON_SIZE = 20;
 const ICON_COLOR = "#999";
 
 const Station = ({
-  _id,
   city,
   name,
   address,
@@ -28,7 +27,7 @@ const Station = ({
   );
   const getSlots = () => (
     <span property="ns:freeSlots">
-      {freeSlot} slots remaining on
+      {freeSlot} slots remaining on {' '}
       <span property="ns:capacity">{capacity}</span>
     </span>
   );
